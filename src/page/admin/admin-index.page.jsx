@@ -8,9 +8,9 @@ const AdminIndexPage = () => {
   return (
     <main>
       <nav>
-        <Button colorScheme='blue'>Button</Button>
-        <Link to="/admin/attendance">attendance</Link>
-        <Link to="/admin/employee">employee</Link>
+        <Link to="/admin/attendance">직원출결현황</Link>
+        <Link to="/admin/employee">직원관리</Link>
+        <Link to="/admin/department">카테고리관리</Link>
       </nav>
       <article>
         <Outlet></Outlet>

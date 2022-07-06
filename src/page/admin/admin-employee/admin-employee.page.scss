@@ -1,0 +1,15 @@
+.admin-employee-list {
+  margin-left: 80px;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .employee-add-btn {
+    display: flex;
+    justify-content: right;
+  }
+}
