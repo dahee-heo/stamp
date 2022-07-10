@@ -14,3 +14,11 @@ export const authRegist = async (resgistParams) => {
 export const departmentRegist = async (departmentRegistParams) => {
   return await axios.post(`${hostUrl}/department`, departmentRegistParams)
 }
+
+export const departmentUpdate = async (departmentUpdateParams) => {
+  return await axios.put(`${hostUrl}/department`, departmentUpdateParams)
+}
+
+export const departmentDelete = async (departmentDeleteParams) => {
+  return await axios.delete(`${hostUrl}/department`, departmentDeleteParams)
+}

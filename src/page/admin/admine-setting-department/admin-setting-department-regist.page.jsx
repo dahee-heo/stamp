@@ -15,7 +15,7 @@ import {
 import { departmentRegist } from '../../../service/auth.service'
 
 const AdminSettingDepartmentRegistPage = (props) => {
-  const { isOpen, onClose } = props
+  const { isOpen, onClose, onCloseComplete, name } = props
   const [inputData, setInputData] = useState({
     department: null,
   })
@@ -25,8 +25,12 @@ const AdminSettingDepartmentRegistPage = (props) => {
 
   async function depRegist(e) {
     const res = await departmentRegist(inputData)
-
+    // console.log('res: ', res);
+    onClose()
   }
+
+
+
 
   return (
     <>
@@ -36,6 +40,7 @@ const AdminSettingDepartmentRegistPage = (props) => {
         finalFocusRef={finalRef}
         isOpen={isOpen}
         onClose={onClose}
+        onCloseComplete={onCloseComplete}
       >
         <ModalOverlay />
         <ModalContent>
