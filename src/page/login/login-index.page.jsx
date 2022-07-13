@@ -22,11 +22,15 @@ const LoginIndexPage = () => {
     role: 'Worker',
   })
   async function submit(e) {
-    const res = await authLogin(formData)
-    if (formData.role === 'Worker') {
-      nav('/employee')
-    } else if (formData.role === 'Manager') {
-      nav('/admin')
+    try {
+      const res = await authLogin(formData)
+      if (formData.role === 'Worker') {
+        nav('/employee')
+      } else if (formData.role === 'Manager') {
+        nav('/admin')
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 

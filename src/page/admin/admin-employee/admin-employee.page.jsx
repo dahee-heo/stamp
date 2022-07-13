@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   TableContainer,
   Table,
@@ -24,12 +24,17 @@ import {
 import './admin-employee.page.scss'
 import { useDisclosure } from '@chakra-ui/react'
 import AdminEmployeeRegistPage from './admin-employee-regist.page'
+import axios from 'axios'
 
 const AdminEmployeePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
+
+  const [DepData, setDepData] = useState([])
+
+
 
   return (
 

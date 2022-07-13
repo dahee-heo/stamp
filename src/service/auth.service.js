@@ -11,6 +11,10 @@ export const authRegist = async (resgistParams) => {
   return await axios.post(`${hostUrl}/auth/sign-up`, resgistParams)
 }
 
+export const userRegist = async (userParams) => {
+  return await axios.post(`${hostUrl}/auth/user-regist`, userParams)
+}
+
 export const departmentRegist = async (departmentRegistParams) => {
   return await axios.post(`${hostUrl}/department`, departmentRegistParams)
 }

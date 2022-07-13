@@ -11,8 +11,14 @@ import {
   FormLabel,
   Input,
   Button,
+  Select,
 } from '@chakra-ui/react'
 import { authRegist } from '../../../service/auth.service'
+import axios from 'axios'
+import * as qs from 'qs'
+import { useSearchParams } from 'react-router-dom'
+import { useEffect } from 'react'
+
 
 const AdminEmployeeRegistPage = (props) => {
   const { isOpen, onClose } = props
@@ -21,6 +27,17 @@ const AdminEmployeeRegistPage = (props) => {
     department: null,
     password: null,
   })
+  const [depData, setDepData] = useState([])
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  useEffect(() => {
+    getDepartmentData()
+  }, [])
+
+  useEffect(() => {
+    console.log(depData)
+  }, [depData])
+
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
@@ -28,6 +45,28 @@ const AdminEmployeeRegistPage = (props) => {
   async function regist(e) {
     const res = await authRegist(inputData)
   }
+
+  async function getDepartmentData() {
+    const paginationMeta = { limit: 100 }
+    const qsString = qs.stringify(paginationMeta)
+    let url = 'http://localhost:3000/department'
+    if (qsString.length) {
+      url += '?' + qsString
+    }
+    const getDepartmentData = await axios.get(url)
+    const { docs, ...option } = getDepartmentData.data
+
+    setSearchParams(paginationMeta, { replace: true })
+
+    setDepData(docs)
+
+
+  }
+
+  async function userRegist() {
+
+  }
+
 
   return (
     <>
@@ -52,7 +91,15 @@ const AdminEmployeeRegistPage = (props) => {
 
             <FormControl mt={4}>
               <FormLabel>부서</FormLabel>
-              <Input placeholder='부서를 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
+              <Select placeholder='Select option' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}>
+                {
+                  depData.map(dep => {
+                    return (
+                      <option key={dep._id} value={dep._id}>{dep.department}</option>
+                    )
+                  })
+                }
+              </Select>
             </FormControl>
             {/* 
             <FormControl mt={4}>
@@ -62,7 +109,7 @@ const AdminEmployeeRegistPage = (props) => {
 
             <FormControl mt={4}>
               <FormLabel>PW</FormLabel>
-              <Input placeholder='Password를 입력해주세요' onChange={e => { setInputData({ ...inputData, password: e.target.value }) }} />
+              <Input type='password' placeholder='Password를 입력해주세요' onChange={e => { setInputData({ ...inputData, password: e.target.value }) }} />
             </FormControl>
           </ModalBody>
 
