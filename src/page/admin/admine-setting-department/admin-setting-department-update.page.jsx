@@ -13,19 +13,33 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { departmentUpdate } from '../../../service/auth.service'
+import axios from 'axios'
 
 const AdminSettingDepartmentUpdatePage = (props) => {
-  const { isOpen, onClose, onCloseComplete } = props
+  const { isOpen, onClose, onCloseComplete, updateDep } = props
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
   const [inputData, setInputData] = useState({
+    department: props.updateDep.department,
+  })
+  const [inputUpdateData, setInputUpdateData] = useState({
     department: null,
+    _id: null,
   })
 
 
-  async function depUpdate() {
-    const res = await departmentUpdate(inputData)
+  const depUpdate = async function () {
+    // console.log(inputData)
+    // console.log(props.updateDep._id)
+    const obj = {
+      department: inputData.department,
+      _id: props.updateDep._id
+    }
+
+    console.log(obj.department, obj._id)
+
+    const updateDepartmentData = await departmentUpdate(obj)
     onClose()
   }
 
@@ -49,12 +63,12 @@ const AdminSettingDepartmentUpdatePage = (props) => {
         <ModalBody pb={6}>
           <FormControl>
             <FormLabel>카테고리명</FormLabel>
-            <Input ref={initialRef} placeholder='카테고리명을 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
+            <Input ref={initialRef} defaultValue={props.updateDep.department} placeholder='카테고리명을 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
           </FormControl>
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme='teal' mr={3} >
+          <Button colorScheme='teal' mr={3} onClick={depUpdate}>
             수정
           </Button>
           <Button onClick={onClose}>닫기</Button>

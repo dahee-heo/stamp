@@ -19,6 +19,6 @@ export const departmentUpdate = async (departmentUpdateParams) => {
   return await axios.put(`${hostUrl}/department`, departmentUpdateParams)
 }
 
-export const departmentDelete = async (departmentDeleteParams) => {
-  return await axios.delete(`${hostUrl}/department`, departmentDeleteParams)
+export const departmentDelete = async (departmentDeleteId) => {
+  return await axios.delete(`${hostUrl}/department/${departmentDeleteId}`)
 }
