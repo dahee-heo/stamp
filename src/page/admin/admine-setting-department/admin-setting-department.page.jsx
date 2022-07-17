@@ -11,6 +11,7 @@ import {
   Badge,
   useDisclosure
 } from '@chakra-ui/react'
+import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import AdminSettingDepartmentRegistPage from './admin-setting-department-regist.page'
 import { departmentRegist, departmentDelete } from '../../../service/auth.service'
 import axios from 'axios'
@@ -115,9 +116,11 @@ const AdminSettingDepartmentPage = () => {
   // console.log(loadDepartment)
 
   return (
-    <div>
+    <div className='admin-department-list'>
       {/* {depData.data} */}
-      <Button colorScheme='teal' onClick={onOpen}>+카테고리추가</Button>
+      <div className='department-add-btn' >
+        <Button colorScheme='teal' onClick={onOpen}>+부서추가</Button>
+      </div>
       <AdminSettingDepartmentRegistPage
         isOpen={isOpen}
         onClose={onClose}
@@ -136,7 +139,7 @@ const AdminSettingDepartmentPage = () => {
           <Thead>
             <Tr>
               <Th>부서</Th>
-              <Th>관리</Th>
+              <Th isNumeric>관리</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -146,7 +149,7 @@ const AdminSettingDepartmentPage = () => {
                 return (
                   <Tr key={item._id}>
                     <Td >{item.department}</Td>
-                    <Td>
+                    <Td isNumeric>
                       <Button colorScheme='teal' size='xs' onClick={() => {
                         setUpdateData(() => item)
                         // console.log(updateData)
@@ -168,7 +171,8 @@ const AdminSettingDepartmentPage = () => {
         </Table>
       </TableContainer>
       <div className='pagination'>
-        <button disabled={paginateOption.hasPrevPage} className='pagination-prev-button'>prev</button>
+        <button disabled={paginateOption.hasPrevPage} className='pagination-prev-button'><ChevronLeftIcon /></button>
+
         {/* <span className='action'>1</span>
         <span>2</span>
         <span>3</span>
@@ -181,7 +185,7 @@ const AdminSettingDepartmentPage = () => {
             )
           })
         }
-        <button disabled={paginateOption.hasNextPage} className='pagination-next-button'>next</button>
+        <button disabled={paginateOption.hasNextPage} className='pagination-next-button'><ChevronRightIcon /></button>
       </div>
     </div>
 

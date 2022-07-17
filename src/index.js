@@ -12,7 +12,10 @@ import AdminEmployeePage from './page/admin/admin-employee/admin-employee.page';
 import AdminSettingDepartmentPage from './page/admin/admine-setting-department/admin-setting-department.page'
 import { ChakraProvider } from '@chakra-ui/react';
 import { RecoilRoot } from 'recoil';
+import axios from 'axios';
 
+//axios default setting 
+axios.defaults.withCredentials = true
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

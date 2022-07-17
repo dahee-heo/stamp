@@ -44,12 +44,12 @@ const AdminSettingDepartmentRegistPage = (props) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>카테고리추가</ModalHeader>
+          <ModalHeader>부서추가</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>카테고리명</FormLabel>
-              <Input ref={initialRef} placeholder='카테고리명을 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
+              <FormLabel>부서명</FormLabel>
+              <Input ref={initialRef} placeholder='부서명을 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
             </FormControl>
           </ModalBody>
 

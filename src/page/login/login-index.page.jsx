@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './login-index.page.scss'
 import {
   FormControl,
@@ -13,22 +13,32 @@ import {
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { authLogin } from '../../service/auth.service'
+import { useRecoilState } from 'recoil'
+import { authState } from '../../atom/auth.atom'
 
 const LoginIndexPage = () => {
+  const [auth, setAuth] = useRecoilState(authState)
   const nav = useNavigate()
   const [formData, setFormData] = useState({
     id: null,
     password: null,
     role: 'Worker',
   })
+
+  useEffect(() => {
+    console.log(auth)
+  }, [auth])
+
   async function submit(e) {
     try {
       const res = await authLogin(formData)
-      if (formData.role === 'Worker') {
-        nav('/employee')
-      } else if (formData.role === 'Manager') {
-        nav('/admin')
-      }
+      console.log('res: ', res);
+      setAuth(() => res.data)
+      // if (formData.role === 'Worker') {
+      //   nav('/employee')
+      // } else if (formData.role === 'Manager') {
+      //   nav('/admin')
+      // }
     } catch (error) {
       console.log(error)
     }
