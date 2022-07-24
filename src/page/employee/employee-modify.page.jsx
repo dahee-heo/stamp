@@ -13,14 +13,15 @@ import {
   Button,
   Select,
 } from '@chakra-ui/react'
-import { authRegist } from '../../../service/auth.service'
 import axios from 'axios'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
 
 
-const AdminEmployeeRegistPage = (props) => {
+
+const EmployeeModifyPage = (props) => {
+
   const { isOpen, onClose } = props
   const [inputData, setInputData] = useState({
     name: null,
@@ -42,9 +43,9 @@ const AdminEmployeeRegistPage = (props) => {
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
 
-  async function regist(e) {
-    const res = await authRegist(inputData)
-  }
+  // async function regist(e) {
+  //   const res = await authRegist(inputData)
+  // }
 
   async function getDepartmentData() {
     const paginationMeta = { limit: 100 }
@@ -74,7 +75,6 @@ const AdminEmployeeRegistPage = (props) => {
     <>
       {/* <Button onClick={onOpen}>Open Modal</Button> */}
 
-
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -83,7 +83,7 @@ const AdminEmployeeRegistPage = (props) => {
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>직원관리</ModalHeader>
+          <ModalHeader >정보수정</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
@@ -116,7 +116,7 @@ const AdminEmployeeRegistPage = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='teal' mr={3} onClick={regist}>
+            <Button colorScheme='teal' mr={3} >
               등록
             </Button>
             <Button onClick={onClose}>닫기</Button>
@@ -127,4 +127,4 @@ const AdminEmployeeRegistPage = (props) => {
   )
 }
 
-export default AdminEmployeeRegistPage
+export default EmployeeModifyPage

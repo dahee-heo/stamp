@@ -12,7 +12,7 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
-import { departmentUpdate } from '../../../service/auth.service'
+import { departmentUpdate } from '../../../service/department.service'
 import axios from 'axios'
 
 const AdminSettingDepartmentUpdatePage = (props) => {

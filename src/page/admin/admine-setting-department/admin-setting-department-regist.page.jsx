@@ -12,7 +12,7 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
-import { departmentRegist } from '../../../service/auth.service'
+import { departmentRegist } from '../../../service/department.service'
 
 const AdminSettingDepartmentRegistPage = (props) => {
   const { isOpen, onClose, onCloseComplete, name } = props

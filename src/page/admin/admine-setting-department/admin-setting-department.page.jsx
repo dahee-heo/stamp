@@ -13,13 +13,14 @@ import {
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import AdminSettingDepartmentRegistPage from './admin-setting-department-regist.page'
-import { departmentRegist, departmentDelete } from '../../../service/auth.service'
+import { departmentRegist, departmentDelete } from '../../../service/department.service'
 import axios from 'axios'
 import { set } from 'react-hook-form'
 import AdminSettingDepartmentUpdatePage from './admin-setting-department-update.page'
 import './admin-setting-department.page.scss'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
+import PaginationComponent from '../../../component/pagination.component'
 
 
 const AdminSettingDepartmentPage = () => {
@@ -61,7 +62,7 @@ const AdminSettingDepartmentPage = () => {
   }, [depData, paginateOption])
 
   const loadDepartment = async function (page = 1) {
-    const paginationMeta = { page, limit: 10 }
+    const paginationMeta = { page: page ?? 1, limit: 10 }
     const qsString = qs.stringify(paginationMeta)
     let url = 'http://localhost:3000/department'
     if (qsString.length) {
@@ -77,37 +78,10 @@ const AdminSettingDepartmentPage = () => {
     setPaginateOption(option)
 
 
-    const pagenation = (page, limit, totalPages) => {
-      const pageNum = []
-
-      let a = Math.floor(page / limit)
-      let start = a * limit + 1
-      let end = start + limit - 1
-      end = end > totalPages ? totalPages : end
-      for (let i = start; i < end + 1; i++) {
-        pageNum.push(i)
-      }
-      setPageArray(pageNum)
-
-    }
-
-    pagenation(option.page, option.limit, option.totalPages)
-    // const pageNum = []
-
-    // let a = Math.floor(option.page / option.limit)
-    // let start = a * option.limit + 1
-    // let end = start + option.limit - 1
-    // end = end > option.totalPages ? option.totalPages : end
-    // for (let i = start; i < end + 1; i++) {
-    //   pageNum.push(i)
-    // }
-    // setPageArray(pageNum)
 
   }
 
   async function depDelete(id) {
-    // setdepDeleteSelect(e.target)
-    // console.log('e.target: ', e.target);
     const res = await departmentDelete(id)
   }
 
@@ -170,23 +144,9 @@ const AdminSettingDepartmentPage = () => {
           </Tbody>
         </Table>
       </TableContainer>
-      <div className='pagination'>
-        <button disabled={paginateOption.hasPrevPage} className='pagination-prev-button'><ChevronLeftIcon /></button>
-
-        {/* <span className='action'>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span> */}
-        {
-          pageArray.map((ele) => {
-            return (
-              <span key={ele} onClick={() => { loadDepartment(ele) }}>{ele}</span>
-            )
-          })
-        }
-        <button disabled={paginateOption.hasNextPage} className='pagination-next-button'><ChevronRightIcon /></button>
-      </div>
+      <PaginationComponent
+        paginateOption={paginateOption}
+      ></PaginationComponent>
     </div>
 
   )

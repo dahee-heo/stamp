@@ -15,14 +15,6 @@ export const userRegist = async (userParams) => {
   return await axios.post(`${hostUrl}/auth/user-regist`, userParams)
 }
 
-export const departmentRegist = async (departmentRegistParams) => {
-  return await axios.post(`${hostUrl}/department`, departmentRegistParams)
-}
-
-export const departmentUpdate = async (departmentUpdateParams) => {
-  return await axios.put(`${hostUrl}/department`, departmentUpdateParams)
-}
-
-export const departmentDelete = async (departmentDeleteId) => {
-  return await axios.delete(`${hostUrl}/department/${departmentDeleteId}`)
+export const sessionVerify = async () => {
+  return await axios.get(`${hostUrl}/auth/session-verify`)
 }

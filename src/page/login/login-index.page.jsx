@@ -31,14 +31,15 @@ const LoginIndexPage = () => {
 
   async function submit(e) {
     try {
+      console.log('formData: ', formData);
       const res = await authLogin(formData)
       console.log('res: ', res);
       setAuth(() => res.data)
-      // if (formData.role === 'Worker') {
-      //   nav('/employee')
-      // } else if (formData.role === 'Manager') {
-      //   nav('/admin')
-      // }
+      if (formData.role === 'Worker') {
+        nav('/employee')
+      } else if (formData.role === 'Manager') {
+        nav('/admin')
+      }
     } catch (error) {
       console.log(error)
     }
