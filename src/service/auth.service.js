@@ -15,6 +15,11 @@ export const userRegist = async (userParams) => {
   return await axios.post(`${hostUrl}/auth/user-regist`, userParams)
 }
 
+export const userUpdate = async (userUpdateParams) => {
+  return await axios.put(`${hostUrl}/auth/user-update`, userUpdateParams)
+}
+
+
 export const sessionVerify = async () => {
   return await axios.get(`${hostUrl}/auth/session-verify`)
 }

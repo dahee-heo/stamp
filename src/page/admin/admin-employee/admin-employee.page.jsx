@@ -9,16 +9,16 @@ import {
   Td,
   Badge,
   Button,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
+  // Modal,
+  // ModalOverlay,
+  // ModalContent,
+  // ModalHeader,
+  // ModalFooter,
+  // ModalBody,
+  // ModalCloseButton,
+  // FormControl,
+  // FormLabel,
+  // Input,
 
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
@@ -94,6 +94,7 @@ const AdminEmployeePage = () => {
         pageNum.push(i)
       }
       setPageArray(pageNum)
+
 
     }
 

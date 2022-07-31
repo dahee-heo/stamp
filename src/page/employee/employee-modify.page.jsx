@@ -17,6 +17,7 @@ import axios from 'axios'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { userUpdate } from '../../service/auth.service'
 
 
 
@@ -35,7 +36,7 @@ const EmployeeModifyPage = (props) => {
 
   useEffect(() => {
     getDepartmentData()
-    getUser()
+    // getUser()
   }, [])
 
   // useEffect(() => {
@@ -69,20 +70,20 @@ const EmployeeModifyPage = (props) => {
 
   }
 
-  async function getUser() {
-    const getId = await axios.get('http://localhost:3000/users')
-    const { name } = getId.data
-    console.log(' getId.data: ', getId.data);
-    setUserData(name)
-    console.log('userData: ', userData);
-  }
+  // async function getUser() {
+  //   const getId = await axios.get('http://localhost:3000/users')
+  //   const { name } = getId.data
+  //   console.log(' getId.data: ', getId.data);
+  //   setUserData(name)
+  //   console.log('userData: ', userData);
+  // }
 
   async function userUpdate() {
     const obj = {
       name: inputData.name,
       _id: updateData._id
     }
-    const updateId = await axios.put('http://localhost:3000/users', obj)
+    const updateUserData = await userUpdate(obj)
     onClose()
   }
 
