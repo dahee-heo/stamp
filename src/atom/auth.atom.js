@@ -9,17 +9,17 @@ export const initialAuthState = {
   token: null,
 }
 
-const setToken = ({ onSet }) => {
-  onSet((userInfo) => {
-    console.log('userInfo: ', userInfo);
-    setInterceptor(userInfo?.token)
-  })
-}
+// const setToken = ({ onSet }) => {
+//   onSet((userInfo) => {
+//     console.log('userInfo: ', userInfo);
+//     setInterceptor(userInfo?.token)
+//   })
+// }
 
 export const authState = atom({
   key: 'authState',
   default: initialAuthState,
-  effects: [
-    setToken
-  ]
+  // effects: [
+  //   setToken
+  // ]
 })

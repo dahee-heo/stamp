@@ -7,25 +7,34 @@ import AdminAttendancePage from './page/admin/admin-attendance.page';
 import AdminIndexPage from './page/admin/admin-index.page';
 import AdminEmployeePage from './page/admin/admin-employee/admin-employee.page';
 import AdminSettingDepartmentPage from './page/admin/admine-setting-department/admin-setting-department.page'
-import { useRecoilState } from 'recoil';
+import { useRecoilCallback, useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { sessionVerify } from './service/auth.service';
 import { authState } from './atom/auth.atom'
 import AuthGuard from './guard/auth.guard';
+import { setInterceptor } from './util/http.util';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState)
   const [isInitialized, setIsInitialized] = useState(false)
+
+  const logAuth = useRecoilCallback(({ snapshot }) => async () => {
+    const snapshotAuth = await snapshot.getPromise(authState)
+
+    if (snapshotAuth?._id || typeof snapshotAuth._id === 'boolean') {
+      setInterceptor(snapshotAuth?.token)
+      setIsInitialized(true)
+    }
+  })
 
   useEffect(() => {
     sessionCheck()
   }, [])
 
   useEffect(() => {
-    if (auth?._id || typeof auth._id === 'boolean') {
-      setIsInitialized(true)
-    }
+    logAuth()
   }, [auth])
+
 
   const sessionCheck = async () => {
     try {
