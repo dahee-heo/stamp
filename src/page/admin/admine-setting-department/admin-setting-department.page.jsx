@@ -26,8 +26,10 @@ import PaginationComponent from '../../../component/pagination.component'
 const AdminSettingDepartmentPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
+
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
+
   const [depData, setDepData] = useState([])
   const [updateData, setUpdateData] = useState({})
   const [paginateOption, setPaginateOption] = useState({
@@ -146,6 +148,7 @@ const AdminSettingDepartmentPage = () => {
       </TableContainer>
       <PaginationComponent
         paginateOption={paginateOption}
+        data={depData}
       ></PaginationComponent>
     </div>
 

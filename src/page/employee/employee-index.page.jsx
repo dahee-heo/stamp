@@ -5,11 +5,11 @@ import {
   RadioGroup,
   Stack,
   Button,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
+  // NumberInput,
+  // NumberInputField,
+  // NumberInputStepper,
+  // NumberIncrementStepper,
+  // NumberDecrementStepper,
   Table,
   Thead,
   Tbody,
@@ -150,8 +150,8 @@ const EmployeeIndexPage = () => {
                       <Tr key={date._id}>
                         <Td>{date.state}</Td>
                         <Td>{format(new Date(+date.datetime), 'yyyy-MM-dd')}</Td>
-                        <Td>{date.datetime.format('EEEE')}</Td>
-                        <Td>{date.datetime.format('hh:mm:ss')}</Td>
+                        <Td>{format(new Date(+date.datetime), 'EEEE')}</Td>
+                        <Td>{format(new Date(+date.datetime), 'hh:mm:ss')}</Td>
                       </Tr>
                     )
                   })

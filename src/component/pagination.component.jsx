@@ -6,9 +6,9 @@ import { useSearchParams } from 'react-router-dom'
 
 const PaginationComponent = ({ paginateOption }) => {
 
-  const { page, limit, totalPages } = paginateOption;
+  const { page, limit, totalDocs, totalPages, hasNextPage, hasPrevPage } = paginateOption;
 
-  const [depData, setDepData] = useState([])
+  // const [depData, setDepData] = useState([])
   const [option, setOption] = useState(paginateOption)
   // setPaginateOption(paginateOption)
 
@@ -19,21 +19,6 @@ const PaginationComponent = ({ paginateOption }) => {
   useEffect(() => {
     pagenation(option.page, option.limit, option.totalPages)
   }, [])
-  // const loadDepartment = async function (page = 1) {
-  //   const paginationMeta = { page, limit: 10 }
-  //   const qsString = qs.stringify(paginationMeta)
-  //   let url = 'http://localhost:3000/department'
-  //   if (qsString.length) {
-  //     url += '?' + qsString
-  //   }
-  //   const getDepartmentData = await axios.get(url)
-  //   const { docs, ...option } = getDepartmentData.data
-
-  //   setSearchParams(paginationMeta, { replace: true })
-  //   setDepData(docs)
-  //   setPaginateOption(option)
-
-  // }
 
   const pagenation = (page, limit, totalPages) => {
     const pageNum = []
@@ -49,7 +34,6 @@ const PaginationComponent = ({ paginateOption }) => {
 
   }
 
-  // pagenation(props.option.page, props.option.limit, props.option.totalPages)
 
 
   return (
