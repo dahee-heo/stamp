@@ -73,6 +73,7 @@ const AdminEmployeePage = () => {
     }
 
     const getUserData = await axios.get(url)
+    console.log('getUserData: ', getUserData);
     const { docs, ...option } = getUserData.data
     console.log('docs: ', docs);
 

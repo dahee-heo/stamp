@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './employee-index.page.scss'
 import {
   Radio,
@@ -21,10 +21,9 @@ import {
 import DatePicker from "react-datepicker";
 import EmployeeModifyPage from './employee-modify.page';
 import { useDisclosure } from '@chakra-ui/react'
-import Moment from 'react-moment';
-import moment from 'moment';
 import { attendanceCreate } from '../../service/attendance.service'
-
+import { format, compareAsc } from 'date-fns'
+import axios from 'axios';
 
 
 const EmployeeIndexPage = () => {
@@ -38,25 +37,41 @@ const EmployeeIndexPage = () => {
   );
 
 
-  const [today, setToday] = useState(moment().format('YYYY-MM-DD'))
-  const [currtime, setCurrtime] = useState(moment().format('hh:mm:ss'))
+  useEffect(() => {
+    let timeInterval = setInterval(() => {
+      setCurrtime(format(new Date(), 'hh:mm:ss'))
+    }, 1000)
+    return () => {
+      clearInterval(timeInterval)
+    }
+  }, [])
 
-  // const MomentDate = () => {
-  //   const now = Date.now()
-  //   return <Moment>{now}</Moment>
-  // }
+  useEffect(() => {
+    roadDate()
+  }, [])
 
-  // startTimer()
-  // MomentDate()
-  setInterval(() => {
-    setCurrtime(currtime)
-  }, 1000)
-  const [checkData, setCheckData] = useState({
-    time: null,
-  })
+  const [today, setToday] = useState(format(new Date(), 'yyyy/MM/dd'))
+  const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
+  const [dateRecord, setDateRecord] = useState([])
+
+
   async function Check(e) {
-    const res = await attendanceCreate(checkData)
+    let commuteState = '출근'
+
+    const res = await attendanceCreate({
+      datetime: Date.now(),
+      state: commuteState
+    })
+    console.log('res: ', res);
+    console.log(Date.now())
   }
+
+  const roadDate = async function () {
+    const getDate = await axios.get('http://localhost:3000/attendance')
+    const datetime = getDate.data
+    setDateRecord(datetime)
+  }
+
   return (
     <>
       <EmployeeModifyPage isOpen={isOpen} onClose={onClose}></EmployeeModifyPage>
@@ -67,7 +82,11 @@ const EmployeeIndexPage = () => {
             <p onClick={onOpen}>정보 수정</p>
           </div>
           <div className='commte-time'>{currtime}</div>
-          <Button className='check-btn' colorScheme='teal'>출석체크👆</Button>
+
+
+          <Button className='check-btn' colorScheme='teal' onClick={Check}>출석체크👆</Button>
+
+
         </div>
 
         <section className='commute__list'>
@@ -125,7 +144,19 @@ const EmployeeIndexPage = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                <Tr>
+                {
+                  dateRecord.map((date) => {
+                    return (
+                      <Tr key={date._id}>
+                        <Td>{date.state}</Td>
+                        <Td>{format(new Date(+date.datetime), 'yyyy-MM-dd')}</Td>
+                        <Td>{date.datetime.format('EEEE')}</Td>
+                        <Td>{date.datetime.format('hh:mm:ss')}</Td>
+                      </Tr>
+                    )
+                  })
+                }
+                {/* <Tr>
                   <Td>퇴근</Td>
                   <Td>2022-05-31</Td>
                   <Td>화</Td>
@@ -148,7 +179,7 @@ const EmployeeIndexPage = () => {
                   <Td>2022-05-30</Td>
                   <Td>월</Td>
                   <Td>08:55</Td>
-                </Tr>
+                </Tr> */}
               </Tbody>
             </Table>
           </TableContainer>

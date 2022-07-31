@@ -30,9 +30,12 @@ const EmployeeModifyPage = (props) => {
   })
   const [depData, setDepData] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
+  const [userData, setUserData] = useState([])
+  const [updateData, setUpdateData] = useState([])
 
   useEffect(() => {
     getDepartmentData()
+    getUser()
   }, [])
 
   // useEffect(() => {
@@ -66,8 +69,21 @@ const EmployeeModifyPage = (props) => {
 
   }
 
-  async function userRegist() {
+  async function getUser() {
+    const getId = await axios.get('http://localhost:3000/users')
+    const { name } = getId.data
+    console.log(' getId.data: ', getId.data);
+    setUserData(name)
+    console.log('userData: ', userData);
+  }
 
+  async function userUpdate() {
+    const obj = {
+      name: inputData.name,
+      _id: updateData._id
+    }
+    const updateId = await axios.put('http://localhost:3000/users', obj)
+    onClose()
   }
 
 
@@ -88,7 +104,7 @@ const EmployeeModifyPage = (props) => {
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>이름</FormLabel>
-              <Input ref={initialRef} placeholder='이름을 입력해주세요' onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
+              <Input ref={initialRef} placeholder='이름을 입력해주세요' defaultValue={updateData.name} onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
             </FormControl>
 
             <FormControl mt={4}>
@@ -116,8 +132,8 @@ const EmployeeModifyPage = (props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='teal' mr={3} >
-              등록
+            <Button colorScheme='teal' mr={3} onClick={userUpdate}>
+              수정
             </Button>
             <Button onClick={onClose}>닫기</Button>
           </ModalFooter>
