@@ -15,6 +15,8 @@ import { useNavigate } from 'react-router-dom'
 import { authLogin } from '../../service/auth.service'
 import { useRecoilState } from 'recoil'
 import { authState } from '../../atom/auth.atom'
+import axios from 'axios'
+import { attendanceRead } from '../../service/attendance.service'
 
 const LoginIndexPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
@@ -43,6 +45,7 @@ const LoginIndexPage = () => {
     } catch (error) {
       console.log(error)
     }
+
   }
 
   // if (value === 'Worker') {

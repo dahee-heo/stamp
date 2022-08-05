@@ -1,7 +1,14 @@
 import axios from "axios"
+import * as qs from 'qs'
 
 export const getHostUrl = () => {
   return `http://localhost:3000`
+}
+
+export const getSearchUrl = (reqUrl, paginationMeta) => {
+  const qsString = qs.stringify(paginationMeta)
+  if (qsString.length) reqUrl += '?' + qsString
+  return reqUrl
 }
 
 export const setInterceptor = (token) => {

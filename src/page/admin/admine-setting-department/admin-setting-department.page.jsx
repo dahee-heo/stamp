@@ -13,12 +13,11 @@ import {
 } from '@chakra-ui/react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import AdminSettingDepartmentRegistPage from './admin-setting-department-regist.page'
-import { departmentRegist, departmentDelete } from '../../../service/department.service'
+import { departmentRegist, departmentDelete, departmentGetList } from '../../../service/department.service'
 import axios from 'axios'
 import { set } from 'react-hook-form'
 import AdminSettingDepartmentUpdatePage from './admin-setting-department-update.page'
 import './admin-setting-department.page.scss'
-import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import PaginationComponent from '../../../component/pagination.component'
 
@@ -65,12 +64,8 @@ const AdminSettingDepartmentPage = () => {
 
   const loadDepartment = async function (page = 1) {
     const paginationMeta = { page: page ?? 1, limit: 10 }
-    const qsString = qs.stringify(paginationMeta)
-    let url = 'http://localhost:3000/department'
-    if (qsString.length) {
-      url += '?' + qsString
-    }
-    const getDepartmentData = await axios.get(url)
+
+    const getDepartmentData = await departmentGetList(paginationMeta)
     const { docs, ...option } = getDepartmentData.data
 
     setSearchParams(paginationMeta, { replace: true })
@@ -93,7 +88,7 @@ const AdminSettingDepartmentPage = () => {
 
   return (
     <div className='admin-department-list'>
-      {/* {depData.data} */}
+      <h2>부서관리</h2>
       <div className='department-add-btn' >
         <Button colorScheme='teal' onClick={onOpen}>+부서추가</Button>
       </div>
@@ -148,7 +143,15 @@ const AdminSettingDepartmentPage = () => {
       </TableContainer>
       <PaginationComponent
         paginateOption={paginateOption}
-        data={depData}
+        onPrev={(pageIndex) => {
+          loadDepartment(pageIndex - 1)
+        }}
+        loadPage={(pageIndex) => {
+          loadDepartment(pageIndex)
+        }}
+        onNext={(pageIndex) => {
+          loadDepartment(pageIndex + 1)
+        }}
       ></PaginationComponent>
     </div>
 

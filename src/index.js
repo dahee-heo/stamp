@@ -7,6 +7,7 @@ import reportWebVitals from './reportWebVitals';
 import { ChakraProvider } from '@chakra-ui/react';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
+import "react-datepicker/dist/react-datepicker.css"
 
 //axios default setting 
 axios.defaults.withCredentials = true

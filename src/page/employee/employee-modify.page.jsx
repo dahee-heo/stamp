@@ -60,7 +60,7 @@ const EmployeeModifyPage = (props) => {
     }
     const getDepartmentData = await axios.get(url)
     const { docs, ...option } = getDepartmentData.data
-    console.log('docs 11111: ', docs);
+    // console.log('docs 11111: ', docs);
 
     setSearchParams(paginationMeta, { replace: true })
 

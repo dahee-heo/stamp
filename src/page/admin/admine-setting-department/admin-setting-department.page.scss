@@ -1,18 +1,12 @@
-@mixin pagination-btn {
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  margin-right: 10px;
-  border-radius: 3px;
-}
-
 .admin-department-list {
   margin-left: 80px;
   display: flex;
   flex-direction: column;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+  }
 
   .department-add-btn {
     display: flex;
@@ -23,26 +17,5 @@
     width: 60vw;
   }
 
-  .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
 
-    button {
-      padding-right: 10px;
-
-    }
-
-    span {
-      @include pagination-btn;
-      border: 1px solid #ddd;
-    }
-
-    .action {
-      @include pagination-btn;
-      font-weight: 800;
-      background-color: #319795;
-      color: #fff;
-    }
-  }
 }

@@ -3,8 +3,9 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
+import './pagination.component.scss'
 
-const PaginationComponent = ({ paginateOption }) => {
+const PaginationComponent = ({ paginateOption, loadPage, onPrev, onNext }) => {
 
   const { page, limit, totalDocs, totalPages, hasNextPage, hasPrevPage } = paginateOption;
 
@@ -17,8 +18,8 @@ const PaginationComponent = ({ paginateOption }) => {
 
 
   useEffect(() => {
-    pagenation(option.page, option.limit, option.totalPages)
-  }, [])
+    pagenation(page, limit, totalPages)
+  }, [page, limit, totalPages])
 
   const pagenation = (page, limit, totalPages) => {
     const pageNum = []
@@ -38,15 +39,15 @@ const PaginationComponent = ({ paginateOption }) => {
 
   return (
     <div className='pagination'>
-      <button disabled={paginateOption.hasPrevPage} className='pagination-prev-button'><ChevronLeftIcon /></button>
+      <button className='pagination-prev-button' onClick={() => { onPrev(page) }}><ChevronLeftIcon /></button>
       {
         pageArray.map((ele) => {
           return (
-            <span key={ele}>{ele}</span>
+            <span className={ele === page ? 'active' : ''} key={ele} onClick={() => { loadPage(ele) }}>{ele}</span>
           )
         })
       }
-      <button disabled={paginateOption.hasNextPage} className='pagination-next-button'><ChevronRightIcon /></button>
+      <button className='pagination-next-button' onClick={() => { onNext(page) }}><ChevronRightIcon /></button>
     </div>
   )
 }

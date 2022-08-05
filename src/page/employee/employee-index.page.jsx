@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { forwardRef, useState, useEffect } from 'react'
 import './employee-index.page.scss'
 import {
   Radio,
@@ -24,18 +24,25 @@ import { useDisclosure } from '@chakra-ui/react'
 import { attendanceCreate } from '../../service/attendance.service'
 import { format, compareAsc } from 'date-fns'
 import axios from 'axios';
+import { sessionVerify } from '../../service/auth.service';
+import { authState } from '../../atom/auth.atom';
+import { useRecoilState } from 'recoil';
 
 
 const EmployeeIndexPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [startDate, setStartDate] = useState(new Date());
-  const ExampleCustomInput = ({ value, onClick }) => (
-    <button className="example-custom-input" onClick={onClick}>
-      {value}
-    </button>
-  );
+  const [today, setToday] = useState(format(new Date(), 'yyyy/MM/dd'))
+  const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
+  const [dateRecord, setDateRecord] = useState([])
+  const [auth, setAuth] = useRecoilState(authState)
 
+  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    <Button className="example-custom-input" onClick={onClick} ref={ref}>
+      {value}
+    </Button>
+  ));
 
   useEffect(() => {
     let timeInterval = setInterval(() => {
@@ -47,23 +54,22 @@ const EmployeeIndexPage = () => {
   }, [])
 
   useEffect(() => {
+    console.log('auth: ', auth);
     roadDate()
   }, [])
 
-  const [today, setToday] = useState(format(new Date(), 'yyyy/MM/dd'))
-  const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
-  const [dateRecord, setDateRecord] = useState([])
+
 
 
   async function Check(e) {
-    let commuteState = '출근'
 
     const res = await attendanceCreate({
       datetime: Date.now(),
-      state: commuteState
+      state: auth.state.state === '출근' ? '퇴근' : '출근'
     })
-    console.log('res: ', res);
-    console.log(Date.now())
+    console.log('res.data: ', res.data);
+    setAuth({ ...auth, state: res.data })
+
   }
 
   const roadDate = async function () {
@@ -84,7 +90,7 @@ const EmployeeIndexPage = () => {
           <div className='commte-time'>{currtime}</div>
 
 
-          <Button className='check-btn' colorScheme='teal' onClick={Check}>출석체크👆</Button>
+          <Button className='check-btn' colorScheme='teal' onClick={Check}>{auth.state.state === '출근' ? '퇴근' : '출근'} 체크👆</Button>
 
 
         </div>

@@ -41,6 +41,7 @@ function App() {
       const res = await sessionVerify()
 
       if (res?.data?._id) {
+        console.log('auth init res?.data: ', res?.data);
         setAuth(() => res.data)
       }
     } catch (error) {

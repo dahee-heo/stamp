@@ -1,18 +1,58 @@
-import React, { useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { Radio, RadioGroup, Stack, Select, Button, DataPicker, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react'
 import DatePicker from "react-datepicker";
+import { useSearchParams } from 'react-router-dom'
+import { adminAttendanceGetList } from '../../service/admin-attendance.service';
+import { format, compareAsc } from 'date-fns'
+
+import { ko } from 'date-fns/locale'
 
 
 
 
 const AdminAttendancePage = () => {
+  const [adminAttendanceData, setAdminAttendanceData] = useState([])
+  const [paginateOption, setPaginateOption] = useState({
+    hasNextPage: null,
+    hasPrevPage: null,
+    limit: null,
+    nextPage: null,
+    page: null,
+    pagingCounter: null,
+    prevPage: null,
+    totalDocs: null,
+    totalPages: null,
 
+  })
   const [startDate, setStartDate] = useState(new Date());
-  const ExampleCustomInput = ({ value, onClick }) => (
-    <button className="example-custom-input" onClick={onClick}>
+  const [searchParams, setSearchParams] = useSearchParams()
+
+
+  useEffect(() => {
+    loadAdminAttendance()
+  }, [])
+  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    <Button className="example-custom-input" onClick={onClick} ref={ref}>
       {value}
-    </button>
-  );
+    </Button>
+  ));
+
+  const loadAdminAttendance = async function (page = 1) {
+    const paginationMeta = { page: page ?? 1, limit: 10 }
+
+    const getAdminAttendanceData = await adminAttendanceGetList(paginationMeta)
+    const { docs, ...option } = getAdminAttendanceData.data
+    console.log('docs: ', docs);
+
+
+    setSearchParams(paginationMeta, { replace: true })
+
+    setAdminAttendanceData(docs)
+    setPaginateOption(option)
+
+
+
+  }
 
   return (
     <div className='admin-attendance-wrap'>
@@ -29,9 +69,6 @@ const AdminAttendancePage = () => {
                 출근
               </Radio>
               <Radio value='3'>
-                외출
-              </Radio>
-              <Radio value='4'>
                 퇴근
               </Radio>
             </Stack>
@@ -85,49 +122,8 @@ const AdminAttendancePage = () => {
               </Tr>
             </Thead>
             <Tbody>
-              <Tr>
-                <Td>김철수</Td>
-                <Td><Badge colorScheme='green'>경영지원</Badge></Td>
-                <Td>2022-05-30</Td>
-                <Td>월</Td>
-                <Td>08:52</Td>
-                <Td>18:02</Td>
-                <Td>9시간 10분</Td>
-                <Td>
-                  <Button colorScheme='teal' size='xs'>
-                    상세
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>achel MacAdams</Td>
-                <Td><Badge colorScheme='green'>경영지원</Badge></Td>
-                <Td>2022-05-30</Td>
-                <Td>월</Td>
-                <Td>08:57</Td>
-                <Td>18:02</Td>
-                <Td>9시간 5분</Td>
-                <Td>
-                  <Button colorScheme='teal' size='xs'>
-                    상세
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
-                <Td>홍길동</Td>
-                <Td><Badge colorScheme='purple'>개발</Badge></Td>
-                <Td>2022-05-30</Td>
-                <Td>월</Td>
-                <Td>08:58</Td>
-                <Td>18:00</Td>
-                <Td>9시간 2분</Td>
-                <Td>
-                  <Button colorScheme='teal' size='xs'>
-                    상세
-                  </Button>
-                </Td>
-              </Tr>
-              <Tr>
+
+              {/* <Tr>
                 <Td>박지은</Td>
                 <Td><Badge colorScheme='purple'>개발</Badge></Td>
                 <Td>2022-05-30</Td>
@@ -140,7 +136,20 @@ const AdminAttendancePage = () => {
                     상세
                   </Button>
                 </Td>
-              </Tr>
+              </Tr>  */}
+              {
+                adminAttendanceData.map((ele) => {
+                  return (
+                    <Tr key={ele._id}>
+                      <Td>{ele.userId.name}</Td>
+                      <Td>{ele.userId.department.department}</Td>
+                      <Td>{format(new Date(+ele.datetime), 'yyyy-MM-dd')}</Td>
+                      <Td>{format(new Date(+ele.datetime), 'EEEE', { locale: ko })}</Td>
+                      <Td>{format(new Date(+ele.datetime), 'hh:mm:ss')}</Td>
+                    </Tr>
+                  )
+                })
+              }
             </Tbody>
           </Table>
         </TableContainer>

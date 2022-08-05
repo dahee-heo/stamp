@@ -1,7 +1,13 @@
-import { getHostUrl } from "../util/http.util";
+import { getHostUrl, getSearchUrl } from "../util/http.util";
 import axios from "axios";
 
+
 const hostUrl = getHostUrl()
+
+export const departmentGetList = async (paginationMeta) => {
+  const url = getSearchUrl(`${hostUrl}/department`, paginationMeta)
+  return await axios.get(url)
+}
 
 export const departmentRegist = async (departmentRegistParams) => {
   return await axios.post(`${hostUrl}/department`, departmentRegistParams)

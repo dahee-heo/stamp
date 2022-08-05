@@ -29,6 +29,8 @@ import AdminEmployeeRegistPage from './admin-employee-regist.page'
 import axios from 'axios'
 import { useSearchParams } from 'react-router-dom'
 import * as qs from 'qs'
+import PaginationComponent from '../../../component/pagination.component'
+
 
 
 
@@ -229,23 +231,20 @@ const AdminEmployeePage = () => {
         </Table>
       </TableContainer>
 
-      <div className='pagination'>
-        <button disabled={paginateOption.hasPrevPage} className='pagination-prev-button'><ChevronLeftIcon /></button>
 
-        {/* <span className='action'>1</span>
-        <span>2</span>
-        <span>3</span>
-        <span>4</span>
-        <span>5</span> */}
-        {
-          pageArray.map((ele) => {
-            return (
-              <span key={ele} onClick={() => { loadUser(ele) }}>{ele}</span>
-            )
-          })
-        }
-        <button disabled={paginateOption.hasNextPage} className='pagination-next-button'><ChevronRightIcon /></button>
-      </div>
+
+      <PaginationComponent
+        paginateOption={paginateOption}
+        onPrev={(pageIndex) => {
+          loadUser(pageIndex - 1)
+        }}
+        loadPage={(pageIndex) => {
+          loadUser(pageIndex)
+        }}
+        onNext={(pageIndex) => {
+          loadUser(pageIndex + 1)
+        }}
+      ></PaginationComponent>
     </div >
   )
 }

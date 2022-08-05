@@ -7,6 +7,7 @@ export const initialAuthState = {
   name: null,
   department: null,
   token: null,
+  state: null,
 }
 
 // const setToken = ({ onSet }) => {
