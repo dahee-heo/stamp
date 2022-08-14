@@ -20,6 +20,7 @@ function App() {
 
   const logAuth = useRecoilCallback(({ snapshot }) => async () => {
     const snapshotAuth = await snapshot.getPromise(authState)
+    console.log('snapshotAuth: ', snapshotAuth);
 
     if (snapshotAuth?._id || typeof snapshotAuth._id === 'boolean') {
       setInterceptor(snapshotAuth?.token)

@@ -12,6 +12,10 @@ import {
   Input,
   Button,
   Select,
+  RadioGroup,
+  setValue,
+  Stack,
+  Radio,
 } from '@chakra-ui/react'
 import { authRegist } from '../../../service/auth.service'
 import axios from 'axios'
@@ -26,6 +30,7 @@ const AdminEmployeeRegistPage = (props) => {
     name: null,
     department: null,
     password: null,
+    role: null,
   })
   const [depData, setDepData] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
@@ -34,16 +39,12 @@ const AdminEmployeeRegistPage = (props) => {
     getDepartmentData()
   }, [])
 
-  // useEffect(() => {
-  //   console.log(depData)
-  // }, [depData])
-
-
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
 
   async function regist(e) {
     const res = await authRegist(inputData)
+    onClose()
   }
 
   async function getDepartmentData() {
@@ -86,33 +87,42 @@ const AdminEmployeeRegistPage = (props) => {
           <ModalHeader>직원관리</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>이름</FormLabel>
-              <Input ref={initialRef} placeholder='이름을 입력해주세요' onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
-            </FormControl>
+            <form>
+              {/* <input type="text" autoComplete='new-password'></input> */}
+              <FormControl>
+                <FormLabel>이름</FormLabel>
+                <Input ref={initialRef} placeholder='이름을 입력해주세요' onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
+              </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>부서</FormLabel>
-              <Select placeholder='Select option' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}>
-                {
-                  depData.map(dep => {
-                    return (
-                      <option key={dep._id} value={dep._id}>{dep.department}</option>
-                    )
-                  })
-                }
-              </Select>
-            </FormControl>
-            {/* 
-            <FormControl mt={4}>
-              <FormLabel>ID</FormLabel>
-              <Input isDisabled={true} placeholder='ID를 입력해주세요' />
-            </FormControl> */}
+              <FormControl mt={4}>
+                <FormLabel>부서</FormLabel>
+                <Select placeholder='Select option' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}>
+                  {
+                    depData.map(dep => {
+                      return (
+                        <option key={dep._id} value={dep._id}>{dep.department}</option>
+                      )
+                    })
+                  }
+                </Select>
+              </FormControl>
 
-            <FormControl mt={4}>
-              <FormLabel>PW</FormLabel>
-              <Input type='password' placeholder='Password를 입력해주세요' onChange={e => { setInputData({ ...inputData, password: e.target.value }) }} />
-            </FormControl>
+              <FormControl mt={4}>
+                <FormLabel>PW</FormLabel>
+                <Input autoComplete='new-password' type='password' placeholder='Password를 입력해주세요' onChange={e => { setInputData({ ...inputData, password: e.target.value }) }} />
+              </FormControl>
+
+              <RadioGroup defaultValue='2' mt={4} onChange={e => { setInputData({ ...inputData, role: e }) }}>
+                <Stack spacing={5} direction='row'>
+                  <Radio colorScheme='teal' value='ADMIN'>
+                    관리자
+                  </Radio>
+                  <Radio colorScheme='teal' value='EMPLOYEE'>
+                    직원
+                  </Radio>
+                </Stack>
+              </RadioGroup>
+            </form>
           </ModalBody>
 
           <ModalFooter>

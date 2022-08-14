@@ -65,11 +65,11 @@ const EmployeeIndexPage = () => {
 
     const res = await attendanceCreate({
       datetime: Date.now(),
-      state: auth.state.state === '출근' ? '퇴근' : '출근'
+      state: auth?.state?.state === '출근' ? '퇴근' : '출근'
     })
     console.log('res.data: ', res.data);
     setAuth({ ...auth, state: res.data })
-
+    window.location.reload()
   }
 
   const roadDate = async function () {
@@ -90,7 +90,7 @@ const EmployeeIndexPage = () => {
           <div className='commte-time'>{currtime}</div>
 
 
-          <Button className='check-btn' colorScheme='teal' onClick={Check}>{auth.state.state === '출근' ? '퇴근' : '출근'} 체크👆</Button>
+          <Button className='check-btn' colorScheme='teal' onClick={Check}>{auth?.state?.state === '출근' ? '퇴근' : '출근'} 체크👆</Button>
 
 
         </div>

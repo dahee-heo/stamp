@@ -3,9 +3,10 @@ import { Radio, RadioGroup, Stack, Select, Button, DataPicker, TableContainer, T
 import DatePicker from "react-datepicker";
 import { useSearchParams } from 'react-router-dom'
 import { adminAttendanceGetList } from '../../service/admin-attendance.service';
-import { format, compareAsc } from 'date-fns'
+import { format, compareAsc, differenceInMinutes, differenceInSeconds } from 'date-fns'
 
 import { ko } from 'date-fns/locale'
+import { differenceInHours } from 'date-fns/esm';
 
 
 
@@ -44,6 +45,17 @@ const AdminAttendancePage = () => {
     const { docs, ...option } = getAdminAttendanceData.data
     console.log('docs: ', docs);
 
+    docs.map((ele) => {
+      if (!ele?.leave?.datetime || !ele?.datetime) return
+
+      const diffSeconds = differenceInSeconds(new Date(+ele?.leave?.datetime), new Date(+ele?.datetime))
+      const hours = Math.floor(diffSeconds / (60 * 60))
+      const hourRest = diffSeconds % (60 * 60)
+      const minuites = Math.floor(hourRest / 60)
+      const minuiteRest = hourRest % 60
+      const seconds = minuiteRest
+      ele.diffFormat = `${hours} ${minuites} ${seconds}`
+    })
 
     setSearchParams(paginationMeta, { replace: true })
 
@@ -123,20 +135,6 @@ const AdminAttendancePage = () => {
             </Thead>
             <Tbody>
 
-              {/* <Tr>
-                <Td>박지은</Td>
-                <Td><Badge colorScheme='purple'>개발</Badge></Td>
-                <Td>2022-05-30</Td>
-                <Td>월</Td>
-                <Td>09:05</Td>
-                <Td>18:05</Td>
-                <Td>9시간</Td>
-                <Td>
-                  <Button colorScheme='teal' size='xs'>
-                    상세
-                  </Button>
-                </Td>
-              </Tr>  */}
               {
                 adminAttendanceData.map((ele) => {
                   return (
@@ -146,6 +144,9 @@ const AdminAttendancePage = () => {
                       <Td>{format(new Date(+ele.datetime), 'yyyy-MM-dd')}</Td>
                       <Td>{format(new Date(+ele.datetime), 'EEEE', { locale: ko })}</Td>
                       <Td>{format(new Date(+ele.datetime), 'hh:mm:ss')}</Td>
+                      <Td>{ele?.leave?.datetime ? format(new Date(+ele?.leave?.datetime), 'hh:mm:ss') : 'NOT_FOUND'}</Td>
+                      {/* <Td>{format(new Date(ele.leave.datetime - ele.datetime), 'hh:mm:ss')}</Td> */}
+                      <Td>{ele?.diffFormat}</Td>
                     </Tr>
                   )
                 })

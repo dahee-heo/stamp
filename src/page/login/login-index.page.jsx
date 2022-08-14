@@ -37,9 +37,9 @@ const LoginIndexPage = () => {
       const res = await authLogin(formData)
       console.log('res: ', res);
       setAuth(() => res.data)
-      if (formData.role === 'Worker') {
+      if (formData.role === 'EMPLOYEE') {
         nav('/employee')
-      } else if (formData.role === 'Manager') {
+      } else if (formData.role === 'ADMIN') {
         nav('/admin')
       }
     } catch (error) {
@@ -67,10 +67,10 @@ const LoginIndexPage = () => {
           <Input id='password' type='password' placeholder='비밀번호를 입력하세요' onChange={e => { setFormData({ ...formData, password: e.target.value }) }} />
         </FormControl>
         <FormControl className="form-control user-choice-radio" as='fieldset'>
-          <RadioGroup defaultValue='Worker' colorScheme='teal' onChange={e => { setFormData({ ...formData, role: e }) }}>
+          <RadioGroup defaultValue='EMPLOYEE' colorScheme='teal' onChange={e => { setFormData({ ...formData, role: e }) }}>
             <HStack spacing='24px'>
-              <Radio value='Manager'>관리자</Radio>
-              <Radio value='Worker'>직원</Radio>
+              <Radio value='ADMIN'>관리자</Radio>
+              <Radio value='EMPLOYEE'>직원</Radio>
             </HStack>
           </RadioGroup>
         </FormControl>

@@ -30,17 +30,19 @@ import axios from 'axios'
 import { useSearchParams } from 'react-router-dom'
 import * as qs from 'qs'
 import PaginationComponent from '../../../component/pagination.component'
-
+import AdminEmployeeUpdatePage from './admin-employee-update.page'
 
 
 
 const AdminEmployeePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
 
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
 
   const [userData, setUserData] = useState([])
+  const [updateData, setUpdateData] = useState({})
   const [paginateOption, setPaginateOption] = useState({
     hasNextPage: null,
     hasPrevPage: null,
@@ -113,37 +115,17 @@ const AdminEmployeePage = () => {
 
         {/* <Button colorScheme='teal' size='md' >+직원등록</Button> */}
       </div>
-      <AdminEmployeeRegistPage isOpen={isOpen} onClose={onClose}></AdminEmployeeRegistPage>
-      {/* <Modal
-        initialFocusRef={initialRef}
-        finalFocusRef={finalRef}
+      <AdminEmployeeRegistPage
         isOpen={isOpen}
         onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Create your account</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>First name</FormLabel>
-              <Input ref={initialRef} placeholder='First name' />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Last name</FormLabel>
-              <Input placeholder='Last name' />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Cancel</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal> */}
+      ></AdminEmployeeRegistPage>
+      <AdminEmployeeUpdatePage
+        isOpen={updateOpen}
+        onClose={updateOnClose}
+        onCloseComplete={loadUser}
+        input={userData}
+        updateDep={updateData}
+      ></AdminEmployeeUpdatePage>
       <TableContainer className='employee-table'>
         <Table variant='striped'>
           <Thead>
