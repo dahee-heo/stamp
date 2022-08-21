@@ -14,6 +14,7 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { myInfoPwUpdate } from '../../service/auth.service'
+import { useEffect } from 'react'
 
 const EmployeeInfoPwUpdate = (props) => {
   const { isOpen, onClose, updateMyInfo } = props
@@ -23,17 +24,29 @@ const EmployeeInfoPwUpdate = (props) => {
     passwordCheck: null,
   })
 
+  useEffect(() => {
+    console.log('props.updateMyInfo: ', props.updateMyInfo);
+  }, [])
+
   async function pwUpdate() {
     const obj = {
-      password: inputData.newPassword,
+      password: inputData.currPassword,
+      newPassword: inputData.newPassword,
+      passwordCheck: inputData.passwordCheck,
       _id: props.updateMyInfo._id,
     }
 
     if (inputData.newPassword === inputData.passwordCheck) {
-      const pwUpdateData = await myInfoPwUpdate(obj)
-      onClose()
+      try {
+        const pwUpdateData = await myInfoPwUpdate(obj)
+        onClose()
+
+      } catch (error) {
+        console.log(error)
+        alert('비밀번호를 정확하게 입력해주세요')
+      }
     } else {
-      alert('잘못된 정보입니다')
+      alert('비밀번호 확인이 일치하지 않습니다')
     }
   }
 

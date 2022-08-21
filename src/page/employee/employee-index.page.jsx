@@ -17,13 +17,14 @@ import {
 import DatePicker from "react-datepicker";
 import EmployeeInfoUpdatePage from './employee-info-update.page';
 import { useDisclosure } from '@chakra-ui/react'
-import { attendanceCreate } from '../../service/attendance.service'
+import { attendanceCreate, attendanceGetList } from '../../service/attendance.service'
 import { format, compareAsc } from 'date-fns'
 import axios from 'axios';
 import { sessionVerify } from '../../service/auth.service';
 import { authState, initialAuthState } from '../../atom/auth.atom';
 import { useRecoilState } from 'recoil';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import PaginationComponent from '../../component/pagination.component';
 
 
 const EmployeeIndexPage = () => {
@@ -31,11 +32,27 @@ const EmployeeIndexPage = () => {
   const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
 
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
+
   const [today, setToday] = useState(format(new Date(), 'yyyy/MM/dd'))
   const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
   const [dateRecord, setDateRecord] = useState([])
   const [auth, setAuth] = useRecoilState(authState)
   const [updateData, setUpdateData] = useState({})
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [paginateOption, setPaginateOption] = useState({
+    hasNextPage: null,
+    hasPrevPage: null,
+    limit: null,
+    nextPage: null,
+    page: null,
+    pagingCounter: null,
+    prevPage: null,
+    totalDocs: null,
+    totalPages: null,
+
+  })
+
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <Button className="example-custom-input" onClick={onClick} ref={ref}>
@@ -53,12 +70,22 @@ const EmployeeIndexPage = () => {
   }, [])
 
   useEffect(() => {
-    console.log('auth: ', auth);
-    roadDate()
+    // console.log('auth: ', auth);
+    let page = searchParams.get('page')
+    loadDate(page)
   }, [])
 
 
 
+  const onChange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+
+    console.log('start: ', start);
+    console.log('end: ', end);
+
+  };
 
   async function Check(e) {
 
@@ -70,10 +97,19 @@ const EmployeeIndexPage = () => {
     setAuth({ ...auth, state: res.data })
   }
 
-  const roadDate = async function () {
-    const getDate = await axios.get('http://localhost:3000/attendance')
-    const datetime = getDate.data
-    setDateRecord(datetime)
+  const loadDate = async function (page = 1, dateRange) {
+    const paginationMeta = { page: page ?? 1, limit: 6, dateRange }
+
+    const getAttendanceData = await attendanceGetList(paginationMeta)
+    console.log('getAttendanceData: ', getAttendanceData);
+    // const getDate = await axios.get('http://localhost:3000/attendance')
+    const { docs, ...option } = getAttendanceData.data
+    // const datetime = getAttendanceData.data
+
+    setSearchParams(paginationMeta, { replace: true })
+    setDateRecord(docs)
+    console.log('docs: ', docs);
+    setPaginateOption(option)
   }
 
   const nav = useNavigate()
@@ -115,13 +151,13 @@ const EmployeeIndexPage = () => {
               <label className='filter-label'>분류</label>
               <RadioGroup defaultValue='1'>
                 <Stack spacing={5} direction='row'>
-                  <Radio value='1'>
+                  <Radio value='전체' >
                     전체
                   </Radio>
-                  <Radio value='2'>
+                  <Radio value='출근' >
                     출근
                   </Radio>
-                  <Radio value='4'>
+                  <Radio value='퇴근' >
                     퇴근
                   </Radio>
                 </Stack>
@@ -145,7 +181,10 @@ const EmployeeIndexPage = () => {
                 </Button>
                 <DatePicker
                   selected={startDate}
-                  onChange={date => setStartDate(date)}
+                  onChange={onChange}
+                  startDate={startDate}
+                  endDate={endDate}
+                  selectsRange
                   customInput={<ExampleCustomInput />}
                 />
               </Stack>
@@ -179,6 +218,19 @@ const EmployeeIndexPage = () => {
               </Tbody>
             </Table>
           </TableContainer>
+
+          <PaginationComponent
+            paginateOption={paginateOption}
+            onPrev={(pageIndex) => {
+              loadDate(pageIndex - 1)
+            }}
+            loadPage={(pageIndex) => {
+              loadDate(pageIndex)
+            }}
+            onNext={(pageIndex) => {
+              loadDate(pageIndex + 1)
+            }}
+          ></PaginationComponent>
 
         </section>
       </main>

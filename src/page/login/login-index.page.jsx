@@ -27,8 +27,8 @@ const LoginIndexPage = () => {
   })
 
   useEffect(() => {
-    console.log(auth)
-    console.log(formData.role)
+    // console.log(auth)
+    // console.log(formData.role)
     if (!auth?._id) return
 
     if (formData.role === 'EMPLOYEE') {
