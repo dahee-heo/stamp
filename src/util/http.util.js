@@ -13,19 +13,24 @@ export const getSearchUrl = (reqUrl, paginationMeta) => {
 
 export const setInterceptor = (token) => {
 
-  axios.interceptors.request.use(
-    (config) => {
-      if (!config?.headers) return config
+  // axios.interceptors.request.use(
+  //   (config) => {
+  //     if (!config?.headers) return config
 
-      if (!token) {
-        delete config.headers.Authorization
-        return config
-      }
+  //     if (!token) {
+  //       delete config.headers.Authorization
+  //       return config
+  //     }
 
-      config.headers["Authorization"] = `Bearer ${token}`
-      return config
-    },
-    (error) => Promise.reject(error)
-  )
+  //     config.headers["Authorization"] = `Bearer ${token}`
+  //     return config
+  //   },
+  //   (error) => Promise.reject(error)
+  // )
+
+  if (!token) return false
+  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+
+  return true
 
 }

@@ -63,7 +63,7 @@ function App() {
               </AuthGuard>
             }></Route>
             <Route path='admin' element={
-              <AuthGuard>
+              <AuthGuard role={'ADMIN'}>
                 <AdminIndexPage></AdminIndexPage>
               </AuthGuard>
             }>

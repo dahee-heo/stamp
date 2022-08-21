@@ -15,8 +15,7 @@ import { useNavigate } from 'react-router-dom'
 import { authLogin } from '../../service/auth.service'
 import { useRecoilState } from 'recoil'
 import { authState } from '../../atom/auth.atom'
-import axios from 'axios'
-import { attendanceRead } from '../../service/attendance.service'
+
 
 const LoginIndexPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
@@ -24,24 +23,28 @@ const LoginIndexPage = () => {
   const [formData, setFormData] = useState({
     id: null,
     password: null,
-    role: 'Worker',
+    role: 'EMPLOYEE',
   })
 
   useEffect(() => {
     console.log(auth)
+    console.log(formData.role)
+    if (!auth?._id) return
+
+    if (formData.role === 'EMPLOYEE') {
+      console.log('employee')
+      nav('/employee')
+    } else if (formData.role === 'ADMIN') {
+      console.log('admin')
+      nav('/admin')
+    }
   }, [auth])
 
   async function submit(e) {
     try {
-      console.log('formData: ', formData);
       const res = await authLogin(formData)
-      console.log('res: ', res);
       setAuth(() => res.data)
-      if (formData.role === 'EMPLOYEE') {
-        nav('/employee')
-      } else if (formData.role === 'ADMIN') {
-        nav('/admin')
-      }
+
     } catch (error) {
       console.log(error)
     }

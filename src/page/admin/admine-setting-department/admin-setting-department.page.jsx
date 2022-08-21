@@ -70,16 +70,13 @@ const AdminSettingDepartmentPage = () => {
 
     setSearchParams(paginationMeta, { replace: true })
 
-
     setDepData(docs)
     setPaginateOption(option)
-
-
-
   }
 
   async function depDelete(id) {
     const res = await departmentDelete(id)
+    loadDepartment(paginateOption.page)
   }
 
 

@@ -5,11 +5,7 @@ import {
   RadioGroup,
   Stack,
   Button,
-  // NumberInput,
-  // NumberInputField,
-  // NumberInputStepper,
-  // NumberIncrementStepper,
-  // NumberDecrementStepper,
+
   Table,
   Thead,
   Tbody,
@@ -19,24 +15,27 @@ import {
   TableContainer,
 } from '@chakra-ui/react'
 import DatePicker from "react-datepicker";
-import EmployeeModifyPage from './employee-modify.page';
+import EmployeeInfoUpdatePage from './employee-info-update.page';
 import { useDisclosure } from '@chakra-ui/react'
 import { attendanceCreate } from '../../service/attendance.service'
 import { format, compareAsc } from 'date-fns'
 import axios from 'axios';
 import { sessionVerify } from '../../service/auth.service';
-import { authState } from '../../atom/auth.atom';
+import { authState, initialAuthState } from '../../atom/auth.atom';
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 
 const EmployeeIndexPage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
 
   const [startDate, setStartDate] = useState(new Date());
   const [today, setToday] = useState(format(new Date(), 'yyyy/MM/dd'))
   const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
   const [dateRecord, setDateRecord] = useState([])
   const [auth, setAuth] = useRecoilState(authState)
+  const [updateData, setUpdateData] = useState({})
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <Button className="example-custom-input" onClick={onClick} ref={ref}>
@@ -69,7 +68,6 @@ const EmployeeIndexPage = () => {
     })
     console.log('res.data: ', res.data);
     setAuth({ ...auth, state: res.data })
-    window.location.reload()
   }
 
   const roadDate = async function () {
@@ -78,14 +76,29 @@ const EmployeeIndexPage = () => {
     setDateRecord(datetime)
   }
 
+  const nav = useNavigate()
+
+  async function logout() {
+    await axios.get('http://localhost:3000/auth/logout')
+    setAuth(initialAuthState)
+    nav('/')
+  }
+
   return (
     <>
-      <EmployeeModifyPage isOpen={isOpen} onClose={onClose}></EmployeeModifyPage>
+      <EmployeeInfoUpdatePage
+        isOpen={updateOpen}
+        onClose={updateOnClose}
+        updateMyInfo={auth}
+      ></EmployeeInfoUpdatePage>
       <main className='commute'>
         <div className='commute__check'>
           <div className='check-top'>
             <p>{today}</p>
-            <p onClick={onOpen}>정보 수정</p>
+            <p onClick={() => {
+              updateOnOpen()
+            }}>정보 수정</p>
+            <p onClick={logout}>로그아웃</p>
           </div>
           <div className='commte-time'>{currtime}</div>
 
@@ -162,30 +175,7 @@ const EmployeeIndexPage = () => {
                     )
                   })
                 }
-                {/* <Tr>
-                  <Td>퇴근</Td>
-                  <Td>2022-05-31</Td>
-                  <Td>화</Td>
-                  <Td>18:02</Td>
-                </Tr>
-                <Tr>
-                  <Td>출근</Td>
-                  <Td>2022-05-31</Td>
-                  <Td>화</Td>
-                  <Td>08:50</Td>
-                </Tr>
-                <Tr>
-                  <Td>퇴근</Td>
-                  <Td>2022-05-30</Td>
-                  <Td>월</Td>
-                  <Td>18:30</Td>
-                </Tr>
-                <Tr>
-                  <Td>출근</Td>
-                  <Td>2022-05-30</Td>
-                  <Td>월</Td>
-                  <Td>08:55</Td>
-                </Tr> */}
+
               </Tbody>
             </Table>
           </TableContainer>

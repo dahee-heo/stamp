@@ -7,6 +7,7 @@ import { format, compareAsc, differenceInMinutes, differenceInSeconds } from 'da
 
 import { ko } from 'date-fns/locale'
 import { differenceInHours } from 'date-fns/esm';
+import PaginationComponent from '../../component/pagination.component';
 
 
 
@@ -54,7 +55,7 @@ const AdminAttendancePage = () => {
       const minuites = Math.floor(hourRest / 60)
       const minuiteRest = hourRest % 60
       const seconds = minuiteRest
-      ele.diffFormat = `${hours} ${minuites} ${seconds}`
+      ele.diffFormat = `${hours} 시간 ${minuites} 분 ${seconds} 초`
     })
 
     setSearchParams(paginationMeta, { replace: true })
@@ -147,10 +148,16 @@ const AdminAttendancePage = () => {
                       <Td>{ele?.leave?.datetime ? format(new Date(+ele?.leave?.datetime), 'hh:mm:ss') : 'NOT_FOUND'}</Td>
                       {/* <Td>{format(new Date(ele.leave.datetime - ele.datetime), 'hh:mm:ss')}</Td> */}
                       <Td>{ele?.diffFormat}</Td>
+                      <Td>
+                        <Button colorScheme='teal' size='xs'>
+                          상세
+                        </Button>
+                      </Td>
                     </Tr>
                   )
                 })
               }
+              {/* <PaginationComponent></PaginationComponent> */}
             </Tbody>
           </Table>
         </TableContainer>

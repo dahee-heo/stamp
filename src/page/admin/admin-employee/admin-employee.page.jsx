@@ -31,6 +31,7 @@ import { useSearchParams } from 'react-router-dom'
 import * as qs from 'qs'
 import PaginationComponent from '../../../component/pagination.component'
 import AdminEmployeeUpdatePage from './admin-employee-update.page'
+import { employeeDelete } from '../../../service/auth.service'
 
 
 
@@ -106,6 +107,11 @@ const AdminEmployeePage = () => {
 
   }
 
+  async function userDelete(id) {
+    const res = await employeeDelete(id)
+    loadUser(paginateOption.page)
+  }
+
   return (
 
     <div className='admin-employee-list'>
@@ -124,7 +130,7 @@ const AdminEmployeePage = () => {
         onClose={updateOnClose}
         onCloseComplete={loadUser}
         input={userData}
-        updateDep={updateData}
+        updateUser={updateData}
       ></AdminEmployeeUpdatePage>
       <TableContainer className='employee-table'>
         <Table variant='striped'>
@@ -133,7 +139,7 @@ const AdminEmployeePage = () => {
               <Th>이름</Th>
               <Th>부서</Th>
               <Th>ID</Th>
-              <Th>관리</Th>
+              <Th isNumeric>관리</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -143,13 +149,16 @@ const AdminEmployeePage = () => {
                 return (
                   <Tr key={user._id}>
                     <Td>{user.name}</Td>
-                    <Td><Badge colorScheme='green'>{user.department}</Badge></Td>
+                    <Td><Badge colorScheme='green'>{user?.department?.department}</Badge></Td>
                     <Td>{user.id}</Td>
-                    <Td>
-                      <Button colorScheme='teal' size='xs'>
+                    <Td isNumeric>
+                      <Button colorScheme='teal' size='xs' onClick={() => {
+                        setUpdateData(() => user)
+                        updateOnOpen()
+                      }}>
                         수정
                       </Button>
-                      <Button variant='outline' colorScheme='teal' size='xs'>
+                      <Button variant='outline' colorScheme='teal' size='xs' onClick={() => { userDelete(user._id) }}>
                         삭제
                       </Button>
                     </Td>
@@ -157,58 +166,7 @@ const AdminEmployeePage = () => {
                 )
               })
             }
-            {/* <Tr>
-              <Td>김철수</Td>
-              <Td><Badge colorScheme='green'>경영지원</Badge></Td>
-              <Td>Random001</Td>
-              <Td>
-                <Button colorScheme='teal' size='xs'>
-                  수정
-                </Button>
-                <Button variant='outline' colorScheme='teal' size='xs'>
-                  삭제
-                </Button>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>Rachel MacAdams</Td>
-              <Td><Badge colorScheme='green'>경영지원</Badge></Td>
-              <Td>rachel</Td>
-              <Td>
-                <Button colorScheme='teal' size='xs'>
-                  수정
-                </Button>
-                <Button variant='outline' colorScheme='teal' size='xs'>
-                  삭제
-                </Button>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>홍길동</Td>
-              <Td><Badge colorScheme='purple'>개발</Badge></Td>
-              <Td>hong</Td>
-              <Td>
-                <Button colorScheme='teal' size='xs'>
-                  수정
-                </Button>
-                <Button variant='outline' colorScheme='teal' size='xs'>
-                  삭제
-                </Button>
-              </Td>
-            </Tr>
-            <Tr>
-              <Td>박지은</Td>
-              <Td><Badge colorScheme='purple'>개발</Badge></Td>
-              <Td>Random004</Td>
-              <Td>
-                <Button colorScheme='teal' size='xs'>
-                  수정
-                </Button>
-                <Button variant='outline' colorScheme='teal' size='xs'>
-                  삭제
-                </Button>
-              </Td>
-            </Tr> */}
+
           </Tbody>
         </Table>
       </TableContainer>

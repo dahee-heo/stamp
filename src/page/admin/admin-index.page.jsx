@@ -24,7 +24,7 @@ const AdminIndexPage = () => {
         <Link to="/admin/attendance">직원출결현황</Link>
         <Link to="/admin/employee">직원관리</Link>
         <Link to="/admin/department">부서관리</Link>
-        <button onClick={logout} >Logout</button>
+        <button className='logout' onClick={logout} >Logout</button>
       </nav>
       <article>
         <Outlet></Outlet>

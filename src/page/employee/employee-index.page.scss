@@ -30,12 +30,17 @@ main {
 
       :nth-child(1) {
         font-size: 16px;
+        flex: 4;
       }
 
-      :nth-child(2) {
+      :nth-child(2),
+      :nth-child(3) {
         font-size: 12px;
         text-decoration-line: underline;
+        margin-left: 10px;
+        cursor: pointer;
       }
+
 
     }
 

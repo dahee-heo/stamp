@@ -1,5 +1,4 @@
 import { atom } from "recoil";
-import { setInterceptor } from "../util/http.util";
 
 export const initialAuthState = {
   _id: null,
@@ -10,13 +9,6 @@ export const initialAuthState = {
   state: null,
   role: null,
 }
-
-// const setToken = ({ onSet }) => {
-//   onSet((userInfo) => {
-//     console.log('userInfo: ', userInfo);
-//     setInterceptor(userInfo?.token)
-//   })
-// }
 
 export const authState = atom({
   key: 'authState',

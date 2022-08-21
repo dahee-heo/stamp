@@ -11,9 +11,14 @@ main {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
-
+    align-items: flex-start;
     padding-top: 60px;
     padding-left: 60px;
+
+    .logout {
+      margin-top: 20px;
+      font-size: 18px;
+    }
   }
 
   article {
