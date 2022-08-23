@@ -50,8 +50,8 @@ const EmployeeIndexPage = () => {
     prevPage: null,
     totalDocs: null,
     totalPages: null,
-
   })
+  // const [type, setType] = useState()
 
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -72,7 +72,7 @@ const EmployeeIndexPage = () => {
   useEffect(() => {
     // console.log('auth: ', auth);
     let page = searchParams.get('page')
-    loadDate(page)
+    loadDate({ page })
   }, [])
 
 
@@ -81,10 +81,14 @@ const EmployeeIndexPage = () => {
     const [start, end] = dates;
     setStartDate(start);
     setEndDate(end);
-
-    console.log('start: ', start);
-    console.log('end: ', end);
-
+    if (start && end) {
+      const params = {
+        page: paginateOption?.page ?? 1,
+        start,
+        end
+      }
+      loadDate(params)
+    }
   };
 
   async function Check(e) {
@@ -97,8 +101,14 @@ const EmployeeIndexPage = () => {
     setAuth({ ...auth, state: res.data })
   }
 
-  const loadDate = async function (page = 1, dateRange) {
-    const paginationMeta = { page: page ?? 1, limit: 6, dateRange }
+  const loadDate = async function ({ page, start, end, type }) {
+    const paginationMeta = {
+      page: page ?? 1,
+      limit: 6,
+      start,
+      end,
+      type,
+    }
 
     const getAttendanceData = await attendanceGetList(paginationMeta)
     console.log('getAttendanceData: ', getAttendanceData);
@@ -149,7 +159,7 @@ const EmployeeIndexPage = () => {
           <div className='filter'>
             <div className='filter-type'>
               <label className='filter-label'>분류</label>
-              <RadioGroup defaultValue='1'>
+              <RadioGroup defaultValue='전체' onChange={type => { loadDate({ type: type === '전체' ? null : type }) }}>
                 <Stack spacing={5} direction='row'>
                   <Radio value='전체' >
                     전체
@@ -166,19 +176,6 @@ const EmployeeIndexPage = () => {
             <div className='filter-date'>
               <label className='filter-label'>날짜</label>
               <Stack spacing={4} direction='row' align='center'>
-                <Button variant='outline' size='md'>
-                  오늘
-                </Button>
-                <Button variant='outline' size='md'>
-                  주
-                </Button>
-                <Button variant='outline' size='md'>
-                  월
-                </Button>
-
-                <Button variant='outline' size='md'>
-                  날짜선택
-                </Button>
                 <DatePicker
                   selected={startDate}
                   onChange={onChange}
@@ -188,7 +185,7 @@ const EmployeeIndexPage = () => {
                   customInput={<ExampleCustomInput />}
                 />
               </Stack>
-              <p className='date-reset'>초기화</p>
+              <p className='date-reset' onClick={() => loadDate({ start: null, end: null })}>초기화</p>
             </div>
           </div>
           <TableContainer>
@@ -222,13 +219,13 @@ const EmployeeIndexPage = () => {
           <PaginationComponent
             paginateOption={paginateOption}
             onPrev={(pageIndex) => {
-              loadDate(pageIndex - 1)
+              loadDate({ page: pageIndex - 1 })
             }}
             loadPage={(pageIndex) => {
-              loadDate(pageIndex)
+              loadDate({ page: pageIndex })
             }}
             onNext={(pageIndex) => {
-              loadDate(pageIndex + 1)
+              loadDate({ page: pageIndex + 1 })
             }}
           ></PaginationComponent>
 

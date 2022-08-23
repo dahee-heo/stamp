@@ -27,22 +27,49 @@ const AdminAttendancePage = () => {
 
   })
   const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams()
 
 
   useEffect(() => {
-    loadAdminAttendance()
+    let page = searchParams.get('page')
+    loadAdminAttendance(page)
   }, [])
+
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
     <Button className="example-custom-input" onClick={onClick} ref={ref}>
       {value}
     </Button>
   ));
 
-  const loadAdminAttendance = async function (page = 1) {
-    const paginationMeta = { page: page ?? 1, limit: 10 }
+  const onChange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+
+    if (start && end) {
+      const params = {
+        page: paginateOption?.page ?? 1,
+        start,
+        end
+      }
+
+      loadAdminAttendance(params)
+    }
+
+  };
+
+  const loadAdminAttendance = async function ({ page, start, end, type }) {
+    const paginationMeta = {
+      page: page ?? 1,
+      limit: 10,
+      start,
+      end,
+      type
+    }
 
     const getAdminAttendanceData = await adminAttendanceGetList(paginationMeta)
+    console.log('getAdminAttendanceData: ', getAdminAttendanceData);
     const { docs, ...option } = getAdminAttendanceData.data
     console.log('docs: ', docs);
 
@@ -71,49 +98,23 @@ const AdminAttendancePage = () => {
     <div className='admin-attendance-wrap'>
       <div className='admin-attendance-list'>
         <h2>출결현황</h2>
-        <div className='filter-type'>
-          <label className='filter-label'>분류</label>
-          <RadioGroup defaultValue='1'>
-            <Stack spacing={5} direction='row'>
-              <Radio value='1'>
-                전체
-              </Radio>
-              <Radio value='2'>
-                출근
-              </Radio>
-              <Radio value='3'>
-                퇴근
-              </Radio>
-            </Stack>
-          </RadioGroup>
-        </div>
-        <div className='filter-dept'>
+        {/* <div className='filter-dept'>
           <label className='dept-label'>부서</label>
           <Select placeholder='부서 선택'>
             <option value='option1'>경영지원</option>
             <option value='option2'>개발</option>
             <option value='option3'>영업</option>
           </Select>
-        </div>
+        </div> */}
         <div className='filter-date'>
           <label className='date-label'>날짜</label>
           <Stack spacing={4} direction='row' align='center'>
-            <Button variant='outline' size='md'>
-              오늘
-            </Button>
-            <Button variant='outline' size='md'>
-              주
-            </Button>
-            <Button variant='outline' size='md'>
-              월
-            </Button>
-
-            <Button variant='outline' size='md'>
-              날짜선택
-            </Button>
             <DatePicker
               selected={startDate}
-              onChange={date => setStartDate(date)}
+              onChange={onChange}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
               customInput={<ExampleCustomInput />}
             />
           </Stack>
@@ -131,7 +132,6 @@ const AdminAttendancePage = () => {
                 <Th>출근시간</Th>
                 <Th>퇴근시간</Th>
                 <Th>총 근무 시간</Th>
-                <Th>상세</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -148,11 +148,6 @@ const AdminAttendancePage = () => {
                       <Td>{ele?.leave?.datetime ? format(new Date(+ele?.leave?.datetime), 'hh:mm:ss') : 'NOT_FOUND'}</Td>
                       {/* <Td>{format(new Date(ele.leave.datetime - ele.datetime), 'hh:mm:ss')}</Td> */}
                       <Td>{ele?.diffFormat}</Td>
-                      <Td>
-                        <Button colorScheme='teal' size='xs'>
-                          상세
-                        </Button>
-                      </Td>
                     </Tr>
                   )
                 })
