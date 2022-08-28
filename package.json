@@ -31,7 +31,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "s3:prod:upload": "aws s3 sync ./build s3://stamp-app-prod --delete",
+    "publish:prod": "npm run build && npm run s3:prod:upload"
   },
   "eslintConfig": {
     "extends": [
