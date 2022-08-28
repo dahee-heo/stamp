@@ -2,7 +2,7 @@ import axios from "axios"
 import * as qs from 'qs'
 
 export const getHostUrl = () => {
-  return `http://localhost:3000`
+  return process?.env?.REACT_APP_HOST_URL ?? `http://localhost:3000`
 }
 
 export const getSearchUrl = (reqUrl, paginationMeta) => {
