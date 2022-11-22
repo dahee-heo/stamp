@@ -18,10 +18,7 @@ export const authRegist = async (resgistParams) => {
 export const userRegist = async (userParams) => {
   return await axios.post(`${hostUrl}/auth/user-regist`, userParams)
 }
-export const userGetList = async (paginationMeta) => {
-  const url = getSearchUrl(`${hostUrl}/auth/user-list`, paginationMeta)
-  return await axios.get(url)
-}
+
 
 export const userUpdate = async (userUpdateParams) => {
   return await axios.put(`${hostUrl}/auth/user-update`, userUpdateParams)

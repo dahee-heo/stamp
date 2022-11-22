@@ -19,7 +19,8 @@ import { useSearchParams } from 'react-router-dom'
 import * as qs from 'qs'
 import PaginationComponent from '../../../component/pagination.component'
 import AdminEmployeeUpdatePage from './admin-employee-update.page'
-import { employeeDelete, userGetList } from '../../../service/auth.service'
+import { employeeDelete } from '../../../service/auth.service'
+import { userGetList } from '../../../service/user.service'
 
 
 
