@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LoginIndexPage from './page/login/login-index.page';
@@ -13,6 +12,7 @@ import { sessionVerify } from './service/auth.service';
 import { authState } from './atom/auth.atom'
 import AuthGuard from './guard/auth.guard';
 import { setInterceptor } from './util/http.util';
+import AdminRegistPage from './page/admin-regist/admin-regist.page';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState)
@@ -20,7 +20,7 @@ function App() {
 
   const logAuth = useRecoilCallback(({ snapshot }) => async () => {
     const snapshotAuth = await snapshot.getPromise(authState)
-    console.log('snapshotAuth: ', snapshotAuth);
+    // console.log('snapshotAuth: ', snapshotAuth);
 
     if (snapshotAuth?._id || typeof snapshotAuth._id === 'boolean') {
       setInterceptor(snapshotAuth?.token)
@@ -42,7 +42,7 @@ function App() {
       const res = await sessionVerify()
 
       if (res?.data?._id) {
-        console.log('auth init res?.data: ', res?.data);
+        // console.log('auth init res?.data: ', res?.data);
         setAuth(() => res.data)
       }
     } catch (error) {
@@ -72,6 +72,7 @@ function App() {
               <Route path='employee' element={<AdminEmployeePage></AdminEmployeePage>}></Route>
               <Route path='department' element={<AdminSettingDepartmentPage></AdminSettingDepartmentPage>}></Route>
             </Route>
+            <Route path='admin-regist' element={<AdminRegistPage></AdminRegistPage>}></Route>
           </Routes>
         )
         : (<div>Loading...</div>)

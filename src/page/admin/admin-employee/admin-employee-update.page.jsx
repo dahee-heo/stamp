@@ -17,6 +17,7 @@ import axios from 'axios'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import { userUpdate } from '../../../service/auth.service'
+import { departmentGetList } from '../../../service/department.service'
 
 
 const AdminEmployeeUpdatePage = (props) => {
@@ -30,20 +31,14 @@ const AdminEmployeeUpdatePage = (props) => {
 
   useEffect(() => {
     getDepartmentData()
-    console.log('depData: ', depData);
+    // console.log('depData: ', depData);
     // getUser()
   }, [])
 
 
   async function getDepartmentData() {
     const paginationMeta = { limit: 100 }
-    const qsString = qs.stringify(paginationMeta)
-
-    let url = 'http://localhost:3000/department'
-    if (qsString.length) {
-      url += '?' + qsString
-    }
-    const getDepartmentData = await axios.get(url)
+    const getDepartmentData = await departmentGetList(paginationMeta)
     const { docs, ...option } = getDepartmentData.data
 
     setSearchParams(paginationMeta, { replace: true })
@@ -60,10 +55,10 @@ const AdminEmployeeUpdatePage = (props) => {
     const obj = {
       name: inputData.name,
       department: inputData.department,
-      _id: props.updateUser._id,
+      _id: updateUser._id,
     }
     console.log(obj.department, obj.name, obj._id)
-    const updateUserDate = await userUpdate(obj)
+    await userUpdate(obj)
     onClose()
   }
 
@@ -82,11 +77,20 @@ const AdminEmployeeUpdatePage = (props) => {
         <ModalBody pb={6}>
           <FormControl>
             <FormLabel>직원이름</FormLabel>
-            <Input ref={initialRef} defaultValue={props.updateUser.name} placeholder='직원이름을 수정해주세요' onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
+            <Input
+              ref={initialRef}
+              defaultValue={updateUser.name}
+              placeholder='직원이름을 수정해주세요'
+              onChange={e => { setInputData({ ...inputData, name: e.target.value }) }}
+            />
           </FormControl>
           <FormControl mt={4}>
             <FormLabel>부서</FormLabel>
-            <Select placeholder='Select option' defaultValue={props.updateUser.department} onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}>
+            <Select
+              defaultValue={updateUser.department}
+              placeholder='Select option'
+              onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}
+            >
               {
                 depData.map(dep => {
                   return (

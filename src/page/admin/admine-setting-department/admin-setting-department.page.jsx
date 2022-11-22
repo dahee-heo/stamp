@@ -11,11 +11,8 @@ import {
   Badge,
   useDisclosure
 } from '@chakra-ui/react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 import AdminSettingDepartmentRegistPage from './admin-setting-department-regist.page'
-import { departmentRegist, departmentDelete, departmentGetList } from '../../../service/department.service'
-import axios from 'axios'
-import { set } from 'react-hook-form'
+import { departmentDelete, departmentGetList } from '../../../service/department.service'
 import AdminSettingDepartmentUpdatePage from './admin-setting-department-update.page'
 import './admin-setting-department.page.scss'
 import { useSearchParams } from 'react-router-dom'
@@ -43,11 +40,6 @@ const AdminSettingDepartmentPage = () => {
     totalPages: null,
 
   })
-  // const [depDeleteSelect, setdepDeleteSelect] = useState({
-  //   _id: null,
-  //   department: null
-  // })
-  //useState , id props로 넘기기
 
   const [pageArray, setPageArray] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
@@ -57,10 +49,10 @@ const AdminSettingDepartmentPage = () => {
     loadDepartment(page)
   }, [])
 
-  useEffect(() => {
-    console.log(depData);
-    console.log(paginateOption)
-  }, [depData, paginateOption])
+  // useEffect(() => {
+  //   console.log(depData);
+  //   console.log(paginateOption)
+  // }, [depData, paginateOption])
 
   const loadDepartment = async function (page = 1) {
     const paginationMeta = { page: page ?? 1, limit: 10 }
@@ -69,7 +61,6 @@ const AdminSettingDepartmentPage = () => {
     const { docs, ...option } = getDepartmentData.data
 
     setSearchParams(paginationMeta, { replace: true })
-
     setDepData(docs)
     setPaginateOption(option)
   }
@@ -79,9 +70,6 @@ const AdminSettingDepartmentPage = () => {
     loadDepartment(paginateOption.page)
   }
 
-
-
-  // console.log(loadDepartment)
 
   return (
     <div className='admin-department-list'>
@@ -126,7 +114,12 @@ const AdminSettingDepartmentPage = () => {
                         수정
                       </Button>
 
-                      <Button variant='outline' colorScheme='teal' size='xs' onClick={() => { depDelete(item._id) }}>
+                      <Button
+                        variant='outline'
+                        colorScheme='teal'
+                        size='xs'
+                        onClick={() => { depDelete(item._id) }}
+                      >
                         삭제
                       </Button>
                     </Td>
@@ -138,6 +131,7 @@ const AdminSettingDepartmentPage = () => {
           </Tbody>
         </Table>
       </TableContainer>
+
       <PaginationComponent
         paginateOption={paginateOption}
         onPrev={(pageIndex) => {

@@ -22,6 +22,7 @@ import axios from 'axios'
 import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import { useEffect } from 'react'
+import { departmentGetList } from '../../../service/department.service'
 
 
 const AdminEmployeeRegistPage = (props) => {
@@ -43,38 +44,25 @@ const AdminEmployeeRegistPage = (props) => {
   const finalRef = React.useRef(null)
 
   async function regist(e) {
-    const res = await authRegist(inputData)
+    await authRegist(inputData)
     onClose()
   }
 
   async function getDepartmentData() {
     const paginationMeta = { limit: 100 }
-    const qsString = qs.stringify(paginationMeta)
-    let url = 'http://localhost:3000/department'
-    if (qsString.length) {
-      url += '?' + qsString
-    }
-    const getDepartmentData = await axios.get(url)
+    const getDepartmentData = await departmentGetList(paginationMeta)
+    console.log('getDepartmentData: ', getDepartmentData);
     const { docs, ...option } = getDepartmentData.data
-    console.log('docs 11111: ', docs);
+    // console.log('docs : ', docs);
 
     setSearchParams(paginationMeta, { replace: true })
-
     setDepData(docs)
-
-
-
   }
 
-  async function userRegist() {
-
-  }
 
 
   return (
     <>
-      {/* <Button onClick={onOpen}>Open Modal</Button> */}
-
 
       <Modal
         initialFocusRef={initialRef}
@@ -88,10 +76,13 @@ const AdminEmployeeRegistPage = (props) => {
           <ModalCloseButton />
           <ModalBody pb={6}>
             <form>
-              {/* <input type="text" autoComplete='new-password'></input> */}
               <FormControl>
                 <FormLabel>이름</FormLabel>
-                <Input ref={initialRef} placeholder='이름을 입력해주세요' onChange={e => { setInputData({ ...inputData, name: e.target.value }) }} />
+                <Input
+                  ref={initialRef}
+                  placeholder='이름을 입력해주세요'
+                  onChange={e => { setInputData({ ...inputData, name: e.target.value }) }}
+                />
               </FormControl>
 
               <FormControl mt={4}>
@@ -109,7 +100,12 @@ const AdminEmployeeRegistPage = (props) => {
 
               <FormControl mt={4}>
                 <FormLabel>PW</FormLabel>
-                <Input autoComplete='new-password' type='password' placeholder='Password를 입력해주세요' onChange={e => { setInputData({ ...inputData, password: e.target.value }) }} />
+                <Input
+                  autoComplete='new-password'
+                  type='password'
+                  placeholder='Password를 입력해주세요'
+                  onChange={e => { setInputData({ ...inputData, password: e.target.value }) }}
+                />
               </FormControl>
 
               <RadioGroup defaultValue='2' mt={4} onChange={e => { setInputData({ ...inputData, role: e }) }}>

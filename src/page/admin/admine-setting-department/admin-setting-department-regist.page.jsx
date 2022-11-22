@@ -34,7 +34,6 @@ const AdminSettingDepartmentRegistPage = (props) => {
 
   return (
     <>
-
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -49,7 +48,11 @@ const AdminSettingDepartmentRegistPage = (props) => {
           <ModalBody pb={6}>
             <FormControl>
               <FormLabel>부서명</FormLabel>
-              <Input ref={initialRef} placeholder='부서명을 입력해주세요' onChange={e => { setInputData({ ...inputData, department: e.target.value }) }} />
+              <Input
+                ref={initialRef}
+                placeholder='부서명을 입력해주세요'
+                onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}
+              />
             </FormControl>
           </ModalBody>
 

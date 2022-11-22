@@ -1,15 +1,11 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { Radio, RadioGroup, Stack, Select, Button, DataPicker, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react'
+import { Stack, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
 import DatePicker from "react-datepicker";
 import { useSearchParams } from 'react-router-dom'
 import { adminAttendanceGetList } from '../../service/admin-attendance.service';
-import { format, compareAsc, differenceInMinutes, differenceInSeconds } from 'date-fns'
-
+import { format, differenceInSeconds } from 'date-fns'
 import { ko } from 'date-fns/locale'
-import { differenceInHours } from 'date-fns/esm';
-import PaginationComponent from '../../component/pagination.component';
-
-
+import { RepeatIcon } from '@chakra-ui/icons';
 
 
 const AdminAttendancePage = () => {
@@ -24,7 +20,6 @@ const AdminAttendancePage = () => {
     prevPage: null,
     totalDocs: null,
     totalPages: null,
-
   })
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
@@ -33,7 +28,7 @@ const AdminAttendancePage = () => {
 
   useEffect(() => {
     let page = searchParams.get('page')
-    loadAdminAttendance(page)
+    loadAdminAttendance({ page })
   }, [])
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -53,10 +48,8 @@ const AdminAttendancePage = () => {
         start,
         end
       }
-
       loadAdminAttendance(params)
     }
-
   };
 
   const loadAdminAttendance = async function ({ page, start, end, type }) {
@@ -69,9 +62,9 @@ const AdminAttendancePage = () => {
     }
 
     const getAdminAttendanceData = await adminAttendanceGetList(paginationMeta)
-    console.log('getAdminAttendanceData: ', getAdminAttendanceData);
+    // console.log('getAdminAttendanceData: ', getAdminAttendanceData);
     const { docs, ...option } = getAdminAttendanceData.data
-    console.log('docs: ', docs);
+    // console.log('docs: ', docs);
 
     docs.map((ele) => {
       if (!ele?.leave?.datetime || !ele?.datetime) return
@@ -86,26 +79,22 @@ const AdminAttendancePage = () => {
     })
 
     setSearchParams(paginationMeta, { replace: true })
-
     setAdminAttendanceData(docs)
     setPaginateOption(option)
+  }
 
+  const onReset = () => {
+    setStartDate(new Date());
+    setEndDate(null);
 
-
+    let page = searchParams.get('page')
+    loadAdminAttendance({ page })
   }
 
   return (
     <div className='admin-attendance-wrap'>
       <div className='admin-attendance-list'>
         <h2>출결현황</h2>
-        {/* <div className='filter-dept'>
-          <label className='dept-label'>부서</label>
-          <Select placeholder='부서 선택'>
-            <option value='option1'>경영지원</option>
-            <option value='option2'>개발</option>
-            <option value='option3'>영업</option>
-          </Select>
-        </div> */}
         <div className='filter-date'>
           <label className='date-label'>날짜</label>
           <Stack spacing={4} direction='row' align='center'>
@@ -118,7 +107,16 @@ const AdminAttendancePage = () => {
               customInput={<ExampleCustomInput />}
             />
           </Stack>
-          <p className='date-reset'>초기화</p>
+          <p className='date-reset'
+            onClick={() => loadAdminAttendance({ start: null, end: null })}
+            style={{
+              marginLeft: '10px',
+              fontSize: '14px',
+              fontWeight: '700',
+              color: '#666',
+              cursor: 'pointer'
+            }}
+          ><RepeatIcon /> 초기화</p>
         </div>
 
         <TableContainer>
@@ -146,7 +144,6 @@ const AdminAttendancePage = () => {
                       <Td>{format(new Date(+ele.datetime), 'EEEE', { locale: ko })}</Td>
                       <Td>{format(new Date(+ele.datetime), 'hh:mm:ss')}</Td>
                       <Td>{ele?.leave?.datetime ? format(new Date(+ele?.leave?.datetime), 'hh:mm:ss') : 'NOT_FOUND'}</Td>
-                      {/* <Td>{format(new Date(ele.leave.datetime - ele.datetime), 'hh:mm:ss')}</Td> */}
                       <Td>{ele?.diffFormat}</Td>
                     </Tr>
                   )

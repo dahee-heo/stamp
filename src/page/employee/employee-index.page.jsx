@@ -5,7 +5,6 @@ import {
   RadioGroup,
   Stack,
   Button,
-
   Table,
   Thead,
   Tbody,
@@ -18,13 +17,14 @@ import DatePicker from "react-datepicker";
 import EmployeeInfoUpdatePage from './employee-info-update.page';
 import { useDisclosure } from '@chakra-ui/react'
 import { attendanceCreate, attendanceGetList } from '../../service/attendance.service'
-import { format, compareAsc } from 'date-fns'
+import { format } from 'date-fns'
 import axios from 'axios';
-import { sessionVerify } from '../../service/auth.service';
 import { authState, initialAuthState } from '../../atom/auth.atom';
 import { useRecoilState } from 'recoil';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PaginationComponent from '../../component/pagination.component';
+import { RepeatIcon } from '@chakra-ui/icons';
+import { authLogout } from '../../service/auth.service';
 
 
 const EmployeeIndexPage = () => {
@@ -51,7 +51,6 @@ const EmployeeIndexPage = () => {
     totalDocs: null,
     totalPages: null,
   })
-  // const [type, setType] = useState()
 
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -112,9 +111,7 @@ const EmployeeIndexPage = () => {
 
     const getAttendanceData = await attendanceGetList(paginationMeta)
     console.log('getAttendanceData: ', getAttendanceData);
-    // const getDate = await axios.get('http://localhost:3000/attendance')
     const { docs, ...option } = getAttendanceData.data
-    // const datetime = getAttendanceData.data
 
     setSearchParams(paginationMeta, { replace: true })
     setDateRecord(docs)
@@ -125,7 +122,7 @@ const EmployeeIndexPage = () => {
   const nav = useNavigate()
 
   async function logout() {
-    await axios.get('http://localhost:3000/auth/logout')
+    await authLogout()
     setAuth(initialAuthState)
     nav('/')
   }
@@ -147,9 +144,13 @@ const EmployeeIndexPage = () => {
             <p onClick={logout}>로그아웃</p>
           </div>
           <div className='commte-time'>{currtime}</div>
-
-
-          <Button className='check-btn' colorScheme='teal' onClick={Check}>{auth?.state?.state === '출근' ? '퇴근' : '출근'} 체크👆</Button>
+          <Button
+            className='check-btn'
+            colorScheme='teal'
+            onClick={Check}
+          >
+            {auth?.state?.state === '출근' ? '퇴근' : '출근'} 체크👆
+          </Button>
 
 
         </div>
@@ -159,7 +160,10 @@ const EmployeeIndexPage = () => {
           <div className='filter'>
             <div className='filter-type'>
               <label className='filter-label'>분류</label>
-              <RadioGroup defaultValue='전체' onChange={type => { loadDate({ type: type === '전체' ? null : type }) }}>
+              <RadioGroup
+                defaultValue='전체'
+                onChange={type => { loadDate({ type: type === '전체' ? null : type }) }}
+              >
                 <Stack spacing={5} direction='row'>
                   <Radio value='전체' >
                     전체
@@ -185,7 +189,16 @@ const EmployeeIndexPage = () => {
                   customInput={<ExampleCustomInput />}
                 />
               </Stack>
-              <p className='date-reset' onClick={() => loadDate({ start: null, end: null })}>초기화</p>
+              <p className='date-reset'
+                onClick={() => loadDate({ start: null, end: null })}
+                style={{
+                  marginLeft: '10px',
+                  fontSize: '14px',
+                  fontWeight: '700',
+                  color: '#666',
+                  cursor: 'pointer'
+                }}
+              ><RepeatIcon /> 초기화</p>
             </div>
           </div>
           <TableContainer>

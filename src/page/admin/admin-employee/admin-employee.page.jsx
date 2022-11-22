@@ -9,19 +9,7 @@ import {
   Td,
   Badge,
   Button,
-  // Modal,
-  // ModalOverlay,
-  // ModalContent,
-  // ModalHeader,
-  // ModalFooter,
-  // ModalBody,
-  // ModalCloseButton,
-  // FormControl,
-  // FormLabel,
-  // Input,
-
 } from '@chakra-ui/react'
-import { ChevronLeftIcon, ChevronRightIcon } from '@chakra-ui/icons'
 
 import './admin-employee.page.scss'
 import { useDisclosure } from '@chakra-ui/react'
@@ -31,7 +19,7 @@ import { useSearchParams } from 'react-router-dom'
 import * as qs from 'qs'
 import PaginationComponent from '../../../component/pagination.component'
 import AdminEmployeeUpdatePage from './admin-employee-update.page'
-import { employeeDelete } from '../../../service/auth.service'
+import { employeeDelete, userGetList } from '../../../service/auth.service'
 
 
 
@@ -60,33 +48,22 @@ const AdminEmployeePage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
-    console.log('test')
-
     let page = searchParams.get('page')
-    console.log('effect page: ', page);
+    // console.log('effect page: ', page);
     loadUser(page)
   }, [])
 
   const loadUser = async function (page = 1) {
     // console.log('load page: ', page);
-
     const paginationMeta = { page: page ?? 1, limit: 10 }
-    const qsString = qs.stringify(paginationMeta)
-    let url = 'http://localhost:3000/users'
-    if (qsString.length) {
-      url += '?' + qsString
-    }
-
-    const getUserData = await axios.get(url)
-    console.log('getUserData: ', getUserData);
+    const getUserData = await userGetList(paginationMeta)
+    // console.log('getUserData: ', getUserData);
     const { docs, ...option } = getUserData.data
-    console.log('docs: ', docs);
+    // console.log('docs: ', docs);
 
     setSearchParams(paginationMeta, { replace: true })
-
     setUserData(docs)
     setPaginateOption(option)
-
 
     const pagenation = (page, limit, totalPages) => {
       const pageNum = []
@@ -99,12 +76,9 @@ const AdminEmployeePage = () => {
         pageNum.push(i)
       }
       setPageArray(pageNum)
-
-
     }
 
     pagenation(option.page, option.limit, option.totalPages)
-
   }
 
   async function userDelete(id) {
@@ -118,8 +92,6 @@ const AdminEmployeePage = () => {
       <h2>직원관리</h2>
       <div className='employee-add-btn'>
         <Button onClick={onOpen} colorScheme='teal'>+직원등록</Button>
-
-        {/* <Button colorScheme='teal' size='md' >+직원등록</Button> */}
       </div>
       <AdminEmployeeRegistPage
         isOpen={isOpen}
@@ -158,7 +130,12 @@ const AdminEmployeePage = () => {
                       }}>
                         수정
                       </Button>
-                      <Button variant='outline' colorScheme='teal' size='xs' onClick={() => { userDelete(user._id) }}>
+                      <Button
+                        variant='outline'
+                        colorScheme='teal'
+                        size='xs'
+                        onClick={() => { userDelete(user._id) }}
+                      >
                         삭제
                       </Button>
                     </Td>

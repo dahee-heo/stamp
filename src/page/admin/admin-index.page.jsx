@@ -5,6 +5,7 @@ import { Button, ButtonGroup } from '@chakra-ui/react'
 import axios from 'axios'
 import { authState, initialAuthState } from '../../atom/auth.atom'
 import { useRecoilState } from 'recoil'
+import { authLogout } from '../../service/auth.service'
 
 
 const AdminIndexPage = () => {
@@ -13,7 +14,7 @@ const AdminIndexPage = () => {
 
   const [auth, setAuth] = useRecoilState(authState)
   const logout = async function () {
-    await axios.get('http://localhost:3000/auth/logout')
+    await authLogout()
     setAuth(initialAuthState)
     nav('/')
   }
