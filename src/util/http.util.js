@@ -2,7 +2,7 @@ import axios from "axios"
 import * as qs from 'qs'
 
 export const getHostUrl = () => {
-  console.log('process.env?.REACT_APP_HOST_URL: ', process.env?.REACT_APP_HOST_URL);
+  // console.log('process.env?.REACT_APP_HOST_URL: ', process.env?.REACT_APP_HOST_URL);
   return process.env?.REACT_APP_HOST_URL ?? `http://localhost:3000`
 }
 

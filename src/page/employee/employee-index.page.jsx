@@ -51,6 +51,7 @@ const EmployeeIndexPage = () => {
     totalDocs: null,
     totalPages: null,
   })
+  let page = searchParams.get('page')
 
 
   const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -70,7 +71,6 @@ const EmployeeIndexPage = () => {
 
   useEffect(() => {
     // console.log('auth: ', auth);
-    let page = searchParams.get('page')
     loadDate({ page })
   }, [])
 
@@ -98,6 +98,7 @@ const EmployeeIndexPage = () => {
     })
     console.log('res.data: ', res.data);
     setAuth({ ...auth, state: res.data })
+    loadDate({ page })
   }
 
   const loadDate = async function ({ page, start, end, type }) {
@@ -110,12 +111,12 @@ const EmployeeIndexPage = () => {
     }
 
     const getAttendanceData = await attendanceGetList(paginationMeta)
-    console.log('getAttendanceData: ', getAttendanceData);
+    // console.log('getAttendanceData: ', getAttendanceData);
     const { docs, ...option } = getAttendanceData.data
 
     setSearchParams(paginationMeta, { replace: true })
     setDateRecord(docs)
-    console.log('docs: ', docs);
+    // console.log('docs: ', docs);
     setPaginateOption(option)
   }
 

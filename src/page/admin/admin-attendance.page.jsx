@@ -6,6 +6,7 @@ import { adminAttendanceGetList } from '../../service/admin-attendance.service';
 import { format, differenceInSeconds } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { RepeatIcon } from '@chakra-ui/icons';
+import PaginationComponent from '../../component/pagination.component';
 
 
 const AdminAttendancePage = () => {
@@ -83,13 +84,7 @@ const AdminAttendancePage = () => {
     setPaginateOption(option)
   }
 
-  const onReset = () => {
-    setStartDate(new Date());
-    setEndDate(null);
 
-    let page = searchParams.get('page')
-    loadAdminAttendance({ page })
-  }
 
   return (
     <div className='admin-attendance-wrap'>
@@ -153,9 +148,20 @@ const AdminAttendancePage = () => {
             </Tbody>
           </Table>
         </TableContainer>
+
+        <PaginationComponent
+          paginateOption={paginateOption}
+          onPrev={(pageIndex) => {
+            loadAdminAttendance({ page: pageIndex - 1 })
+          }}
+          loadPage={(pageIndex) => {
+            loadAdminAttendance({ page: pageIndex })
+          }}
+          onNext={(pageIndex) => {
+            loadAdminAttendance({ page: pageIndex + 1 })
+          }}
+        />
       </div>
-
-
     </div>
   )
 }
