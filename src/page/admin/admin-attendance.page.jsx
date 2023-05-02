@@ -63,9 +63,7 @@ const AdminAttendancePage = () => {
     }
 
     const getAdminAttendanceData = await adminAttendanceGetList(paginationMeta)
-    // console.log('getAdminAttendanceData: ', getAdminAttendanceData);
     const { docs, ...option } = getAdminAttendanceData.data
-    // console.log('docs: ', docs);
 
     docs.map((ele) => {
       if (!ele?.leave?.datetime || !ele?.datetime) return
@@ -115,7 +113,7 @@ const AdminAttendancePage = () => {
         </div>
 
         <TableContainer>
-          <Table variant='striped'>
+          <Table variant='striped' size="sm" maxWidth="100%">
             <Thead>
               <Tr>
                 <Th>이름</Th>

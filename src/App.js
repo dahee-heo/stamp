@@ -55,25 +55,27 @@ function App() {
     <>
       {isInitialized
         ? (
-          <Routes>
-            <Route path='/' element={<LoginIndexPage></LoginIndexPage>}></Route>
-            <Route path='employee' element={
-              <AuthGuard>
-                <EmployeeIndexPage></EmployeeIndexPage>
-              </AuthGuard>
-            }></Route>
-            <Route path='admin' element={
-              <AuthGuard role={'ADMIN'}>
-                <AdminIndexPage></AdminIndexPage>
-              </AuthGuard>
-            }>
-              <Route path='' element={<Navigate to='attendance' replace />}></Route>
-              <Route path='attendance' element={<AdminAttendancePage></AdminAttendancePage>}></Route>
-              <Route path='employee' element={<AdminEmployeePage></AdminEmployeePage>}></Route>
-              <Route path='department' element={<AdminSettingDepartmentPage></AdminSettingDepartmentPage>}></Route>
-            </Route>
-            <Route path='admin-regist' element={<AdminRegistPage></AdminRegistPage>}></Route>
-          </Routes>
+          <>
+            <Routes>
+              <Route path='/' element={<LoginIndexPage></LoginIndexPage>}></Route>
+              <Route path='employee' element={
+                <AuthGuard>
+                  <EmployeeIndexPage></EmployeeIndexPage>
+                </AuthGuard>
+              }></Route>
+              <Route path='admin' element={
+                <AuthGuard role={'ADMIN'}>
+                  <AdminIndexPage></AdminIndexPage>
+                </AuthGuard>
+              }>
+                <Route path='' element={<Navigate to='attendance' replace />}></Route>
+                <Route path='attendance' element={<AdminAttendancePage></AdminAttendancePage>}></Route>
+                <Route path='employee' element={<AdminEmployeePage></AdminEmployeePage>}></Route>
+                <Route path='department' element={<AdminSettingDepartmentPage></AdminSettingDepartmentPage>}></Route>
+              </Route>
+              <Route path='admin-regist' element={<AdminRegistPage></AdminRegistPage>}></Route>
+            </Routes>
+          </>
         )
         : (<div>Loading...</div>)
       }
