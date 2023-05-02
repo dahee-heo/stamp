@@ -8,78 +8,134 @@ import {
   Radio,
   HStack,
   Button,
+  FormErrorMessage,
 } from '@chakra-ui/react'
 import { useNavigate } from 'react-router-dom'
 import { authLogin } from '../../service/auth.service'
 import { useRecoilState } from 'recoil'
 import { authState } from '../../atom/auth.atom'
+import { useController, useForm } from 'react-hook-form'
 
 
 const LoginIndexPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
   const nav = useNavigate()
-  const [formData, setFormData] = useState({
-    id: null,
-    password: null,
-    role: 'EMPLOYEE',
+  // const [formData, setFormData] = useState({
+  //   id: null,
+  //   password: null,
+  //   role: 'EMPLOYEE',
+  // })
+  const { register, control, handleSubmit, formState: { errors } } = useForm({
+    mode: "onSubmit",
+    defaultValues: {
+      id: null,
+      password: null,
+      role: 'EMPLOYEE',
+    }
+  });
+  const { field } = useController({
+    name: 'role',
+    control: control
   })
+
+  const { value } = field;
+  const role = value;
 
   useEffect(() => {
     if (!auth?._id) return
-    if (formData.role === 'EMPLOYEE') {
-      console.log('employee')
+    if (role === 'EMPLOYEE') {
       nav('/employee')
-    } else if (formData.role === 'ADMIN') {
-      console.log('admin')
+    } else if (role === 'ADMIN') {
       nav('/admin')
     }
   }, [auth])
 
-  async function submit(e) {
+  async function submit(data) {
     try {
-      const res = await authLogin(formData)
+      const res = await authLogin(data)
       setAuth(() => res.data)
     } catch (error) {
       console.log(error)
     }
   }
 
+  // const handleChange = (event) => {
+  //   setFormData({
+  //     ...formData, 
+  //     [event.target.id]: event.target.value
+  //   })    
+  // }
+
 
   return (
     <main className='login'>
       <div className='login__form'>
         <h1 className='form-label'>로그인</h1>
-        <FormControl className="form-control id">
-          <FormLabel htmlFor='id'>ID</FormLabel>
-          <Input
-            id='id'
-            type='id'
-            placeholder='ID를 입력하세요'
-            onChange={e => { setFormData({ ...formData, id: e.target.value }) }}
-          />
-        </FormControl>
-        <FormControl className="form-control pw">
-          <FormLabel htmlFor='password'>Password</FormLabel>
-          <Input
-            id='password'
-            type='password'
-            placeholder='비밀번호를 입력하세요'
-            onChange={e => { setFormData({ ...formData, password: e.target.value }) }}
-          />
-        </FormControl>
-        <FormControl className="form-control user-choice-radio" as='fieldset'>
-          <RadioGroup
-            defaultValue='EMPLOYEE'
-            colorScheme='teal'
-            onChange={e => { setFormData({ ...formData, role: e }) }}
-          >
-            <HStack spacing='24px'>
-              <Radio value='ADMIN'>관리자</Radio>
-              <Radio value='EMPLOYEE'>직원</Radio>
-            </HStack>
-          </RadioGroup>
-        </FormControl>
-        <Button className='login-btn' colorScheme='teal' onClick={submit}>로그인</Button>
+        <form onSubmit={handleSubmit(submit)}>
+          <FormControl className="form-control id" isInvalid={errors.id}>
+            <FormLabel htmlFor='id'>ID</FormLabel>
+            <Input
+              id='id'
+              placeholder='ID를 입력하세요'
+              errorBorderColor='red.300'
+              // onChange={handleChange}
+              {...register("id",{
+                required: true,
+                minLength: {
+                  value: 2,
+                  message: "2글자 이상 입력해주세요."
+                }
+              })}
+              />
+              {errors.id && <FormErrorMessage>2글자 이상 입력해주세요.</FormErrorMessage>}
+          </FormControl>
+          <FormControl className="form-control pw" isInvalid={errors.password}>
+            <FormLabel htmlFor='password'>Password</FormLabel>
+            <Input
+              id='password'
+              type='password'
+              placeholder='비밀번호를 입력하세요'
+              errorBorderColor='red.300'
+              // onChange={handleChange}
+              {...register("password",{
+                required: true,
+                minLength: {
+                  value: 2,
+                  message: "2글자 이상 입력해주세요."
+                }
+              })}
+            />
+            {errors.password && <FormErrorMessage>2글자 이상 입력해주세요.</FormErrorMessage>}
+          </FormControl>
+          <FormControl className="form-control user-choice-radio" as='fieldset'>
+            <RadioGroup
+              defaultValue='EMPLOYEE'
+              colorScheme='teal'
+              // onChange={e => { setFormData({ ...formData, role: e }) }}
+            >
+              <HStack spacing='24px'>
+                <Radio 
+                  value='ADMIN'
+                  {...register("role",{
+                    required: true,
+                  })} 
+                >관리자</Radio>
+                <Radio 
+                  value='EMPLOYEE'
+                  {...register("role",{
+                    required: true,
+                  })}
+                >직원</Radio>
+              </HStack>
+            </RadioGroup>
+          </FormControl>
+          <Button 
+            className='login-btn' 
+            colorScheme='teal' 
+            type='submit'
+            // onClick={submit}
+          >로그인</Button>
+        </form>
       </div>
     </main>
 
