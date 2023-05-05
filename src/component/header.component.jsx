@@ -9,8 +9,6 @@ import { authLogout } from '../service/auth.service';
 export const HeaderComponent = () => {
   const nav = useNavigate()
   const location = useLocation();
-  console.log('location: ', location.pathname.includes("/admin"));
-
 
   const [auth, setAuth] = useRecoilState(authState)
   const logout = async function () {

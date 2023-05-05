@@ -38,7 +38,6 @@ const EmployeeIndexPage = () => {
   const [currtime, setCurrtime] = useState(format(new Date(), 'hh:mm:ss'))
   const [dateRecord, setDateRecord] = useState([])
   const [auth, setAuth] = useRecoilState(authState)
-  const [updateData, setUpdateData] = useState({})
   const [searchParams, setSearchParams] = useSearchParams()
   const [paginateOption, setPaginateOption] = useState({
     hasNextPage: null,
@@ -96,7 +95,6 @@ const EmployeeIndexPage = () => {
       datetime: Date.now(),
       state: auth?.state?.state === '출근' ? '퇴근' : '출근'
     })
-    console.log('res.data: ', res.data);
     setAuth({ ...auth, state: res.data })
     loadDate({ page })
   }

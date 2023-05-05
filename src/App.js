@@ -13,6 +13,10 @@ import { authState } from './atom/auth.atom'
 import AuthGuard from './guard/auth.guard';
 import { setInterceptor } from './util/http.util';
 import AdminRegistPage from './page/admin-regist/admin-regist.page';
+import AdminDashboardPage from './page/admin/admin-dashboard/admin-dashboard.page';
+import AdminNoticePage from './page/admin/admin-notice/admin-notice.page';
+import AdminNoticeRegistPage from './page/admin/admin-notice/admin-notice-regist.page';
+import AdminNoticeDetailPage from './page/admin/admin-notice/admin-notice-detail.page';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState)
@@ -57,23 +61,27 @@ function App() {
         ? (
           <>
             <Routes>
-              <Route path='/' element={<LoginIndexPage></LoginIndexPage>}></Route>
+              <Route path='/' element={<LoginIndexPage/>}></Route>
               <Route path='employee' element={
                 <AuthGuard>
-                  <EmployeeIndexPage></EmployeeIndexPage>
+                  <EmployeeIndexPage/>
                 </AuthGuard>
               }></Route>
               <Route path='admin' element={
                 <AuthGuard role={'ADMIN'}>
-                  <AdminIndexPage></AdminIndexPage>
+                  <AdminIndexPage/>
                 </AuthGuard>
               }>
-                <Route path='' element={<Navigate to='attendance' replace />}></Route>
-                <Route path='attendance' element={<AdminAttendancePage></AdminAttendancePage>}></Route>
-                <Route path='employee' element={<AdminEmployeePage></AdminEmployeePage>}></Route>
-                <Route path='department' element={<AdminSettingDepartmentPage></AdminSettingDepartmentPage>}></Route>
+                <Route path='' element={<Navigate to='home' replace />}></Route>
+                <Route path='home' element={<AdminDashboardPage/>}></Route>
+                <Route path='attendance' element={<AdminAttendancePage/>}></Route>
+                <Route path='employee' element={<AdminEmployeePage/>}></Route>
+                <Route path='department' element={<AdminSettingDepartmentPage/>}></Route>
+                <Route path='notice' element={<AdminNoticePage/>}></Route>
+                <Route path='notice/:id' element={<AdminNoticeDetailPage/>}></Route>
+                <Route path='notice/regist' element={<AdminNoticeRegistPage/>}></Route>
               </Route>
-              <Route path='admin-regist' element={<AdminRegistPage></AdminRegistPage>}></Route>
+              <Route path='admin-regist' element={<AdminRegistPage/>}></Route>
             </Routes>
           </>
         )
