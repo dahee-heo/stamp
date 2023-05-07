@@ -10,28 +10,29 @@ export const noticeGetList = async (paginationMeta) => {
   return await axios.get(url)
 }
 
-export const noticeGet = async (noticeGetParams) => {
-  const url = getSearchUrl(`${hostUrl}/notice/${noticeGetParams}`)
+export const noticeGet = async (params) => {
+  const url = getSearchUrl(`${hostUrl}/notice/${params}`)
   return await axios.get(url)
 }
 
-export const noticeRegist = async (noticeRegistParams) => {
-  return await axios.post(`${hostUrl}/notice`, noticeRegistParams)
+export const noticeRegist = async (params) => {
+  return await axios.post(`${hostUrl}/notice`, params)
 }
 
-export const noticeUpdate = async (noticeUpdateParams) => {
-  return await axios.put(`${hostUrl}/notice`, noticeUpdateParams)
+export const noticeUpdate = async (params) => {
+  return await axios.patch(`${hostUrl}/notice`, params)
 }
 
-export const noticeDelete = async (noticeDeleteId) => {
-  return await axios.delete(`${hostUrl}/notice/${noticeDeleteId}`)
+export const noticeDelete = async (params) => {
+  return await axios.delete(`${hostUrl}/notice/${params}`)
 }
 
 //notice 댓글
-export const commentRegist = async (noticeCommentRegistParams) => {
-  return await axios.post(`${hostUrl}/notice/${noticeCommentRegistParams.noticeId}/comment`, noticeCommentRegistParams)
+export const commentRegist = async (params) => {
+  return await axios.post(`${hostUrl}/notice/${params.noticeId}/comment`, params)
 }
 
-export const commentGet = async (noticeCommentGetParams) => {
-  return await axios.get(`${hostUrl}/notice/${noticeCommentGetParams}/comment`)
+export const commentGet = async (params) => {
+  return await axios.get(`${hostUrl}/notice/${params}/comment`)
 }
+

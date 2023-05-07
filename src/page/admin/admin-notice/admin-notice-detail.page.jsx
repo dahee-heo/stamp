@@ -11,6 +11,7 @@ import ReactHtmlParser from "react-html-parser";
 import { commentGet, commentRegist, noticeGet } from '../../../service/notice.service';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../../atom/auth.atom';
+import { format } from 'date-fns';
 
 const AdminNoticeDetailPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
@@ -96,7 +97,7 @@ const AdminNoticeDetailPage = () => {
               ) : (
                 <div>
                   {comment.userId.name}
-                  {comment.date}
+                  {format(new Date(comment.date), 'yyyy-MM-dd hh:mm:ss')}
                   {comment.content}
                   <Button>수정</Button>
                 </div>

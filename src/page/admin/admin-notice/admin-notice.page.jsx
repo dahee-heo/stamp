@@ -9,9 +9,10 @@ import {
   Td,
   Button,
 } from '@chakra-ui/react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import PaginationComponent from '../../../component/pagination.component'
 import { noticeDelete, noticeGetList } from '../../../service/notice.service'
+import { format } from 'date-fns'
 
 const AdminNoticePage = () => {
   const [noticeData, setNoticeData] = useState([])
@@ -30,6 +31,7 @@ const AdminNoticePage = () => {
 
   const [pageArray, setPageArray] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
+  const navigate = useNavigate();
 
   useEffect(() => {
     let page = searchParams.get('page')
@@ -62,9 +64,14 @@ const AdminNoticePage = () => {
   }
 
   async function handleDelete(id) {
-    const res = await noticeDelete(id)
-    loadNotice(paginateOption.page)
+    if(window.confirm('게시글을 삭제하시겠습니까?')) {
+      const res = await noticeDelete(id)
+      loadNotice(paginateOption.page)
+    } else {
+      return;
+    }
   }
+
 
 
   return (
@@ -81,24 +88,26 @@ const AdminNoticePage = () => {
               <Th>제목</Th>
               <Th>게시일</Th>
               <Th>작성자</Th>
-              <Th isNumeric>관리</Th>
+              <Th>관리</Th>
             </Tr>
           </Thead>
           <Tbody>
-
             {
               noticeData?.map((notice) => {
                 return (
                   <Tr key={notice._id}>
                     <Td><Link to={`/admin/notice/${notice._id}`}> {notice.title}</Link></Td>
-                    <Td>{notice.date}</Td>
+                    <Td>{format(new Date(notice.date), 'yyyy-MM-dd')}</Td>
                     <Td>{notice.userId?.name}</Td>
                     <Td isNumeric>
-                      <Button colorScheme='teal' size='xs' onClick={() => {
-                        setUpdateData(() => notice)
-                      }}>
-                        수정
-                      </Button>
+                      <Link to={`/admin/notice/edit/${notice._id}`}>
+                        <Button 
+                          colorScheme='teal' 
+                          size='xs' 
+                        >
+                          수정
+                        </Button>
+                      </Link>
                       <Button
                         variant='outline'
                         colorScheme='teal'

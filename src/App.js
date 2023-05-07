@@ -17,6 +17,7 @@ import AdminDashboardPage from './page/admin/admin-dashboard/admin-dashboard.pag
 import AdminNoticePage from './page/admin/admin-notice/admin-notice.page';
 import AdminNoticeRegistPage from './page/admin/admin-notice/admin-notice-regist.page';
 import AdminNoticeDetailPage from './page/admin/admin-notice/admin-notice-detail.page';
+import AdminNoticeEditPage from './page/admin/admin-notice/admin-notice-edit.page';
 
 function App() {
   const [auth, setAuth] = useRecoilState(authState)
@@ -80,6 +81,7 @@ function App() {
                 <Route path='notice' element={<AdminNoticePage/>}></Route>
                 <Route path='notice/:id' element={<AdminNoticeDetailPage/>}></Route>
                 <Route path='notice/regist' element={<AdminNoticeRegistPage/>}></Route>
+                <Route path='notice/edit/:id' element={<AdminNoticeEditPage/>}></Route>
               </Route>
               <Route path='admin-regist' element={<AdminRegistPage/>}></Route>
             </Routes>

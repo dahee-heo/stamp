@@ -9,14 +9,14 @@ export const departmentGetList = async (paginationMeta) => {
   return await axios.get(url)
 }
 
-export const departmentRegist = async (departmentRegistParams) => {
-  return await axios.post(`${hostUrl}/department`, departmentRegistParams)
+export const departmentRegist = async (params) => {
+  return await axios.post(`${hostUrl}/department`, params)
 }
 
-export const departmentUpdate = async (departmentUpdateParams) => {
-  return await axios.put(`${hostUrl}/department`, departmentUpdateParams)
+export const departmentUpdate = async (params) => {
+  return await axios.put(`${hostUrl}/department`, params)
 }
 
-export const departmentDelete = async (departmentDeleteId) => {
-  return await axios.delete(`${hostUrl}/department/${departmentDeleteId}`)
+export const departmentDelete = async (params) => {
+  return await axios.delete(`${hostUrl}/department/${params}`)
 }
