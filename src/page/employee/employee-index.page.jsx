@@ -22,9 +22,9 @@ import axios from 'axios';
 import { authState, initialAuthState } from '../../atom/auth.atom';
 import { useRecoilState } from 'recoil';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import PaginationComponent from '../../component/pagination.component';
 import { RepeatIcon } from '@chakra-ui/icons';
 import { authLogout } from '../../service/auth.service';
+import Pagination from '../../component/Pagination';
 
 
 const EmployeeIndexPage = () => {
@@ -228,7 +228,7 @@ const EmployeeIndexPage = () => {
             </Table>
           </TableContainer>
 
-          <PaginationComponent
+          <Pagination
             paginateOption={paginateOption}
             onPrev={(pageIndex) => {
               loadDate({ page: pageIndex - 1 })
@@ -239,7 +239,7 @@ const EmployeeIndexPage = () => {
             onNext={(pageIndex) => {
               loadDate({ page: pageIndex + 1 })
             }}
-          ></PaginationComponent>
+          ></Pagination>
 
         </section>
       </main>

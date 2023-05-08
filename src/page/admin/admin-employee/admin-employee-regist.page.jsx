@@ -35,13 +35,12 @@ const AdminEmployeeRegistPage = (props) => {
   })
   const [depData, setDepData] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
+  const initialRef = React.useRef(null)
+  const finalRef = React.useRef(null)
 
   useEffect(() => {
     getDepartmentData()
   }, [])
-
-  const initialRef = React.useRef(null)
-  const finalRef = React.useRef(null)
 
   async function regist(e) {
     await authRegist(inputData)
@@ -51,19 +50,13 @@ const AdminEmployeeRegistPage = (props) => {
   async function getDepartmentData() {
     const paginationMeta = { limit: 100 }
     const getDepartmentData = await departmentGetList(paginationMeta)
-    console.log('getDepartmentData: ', getDepartmentData);
     const { docs, ...option } = getDepartmentData.data
-    // console.log('docs : ', docs);
-
     setSearchParams(paginationMeta, { replace: true })
     setDepData(docs)
   }
 
-
-
   return (
     <>
-
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -108,7 +101,7 @@ const AdminEmployeeRegistPage = (props) => {
                 />
               </FormControl>
 
-              <RadioGroup defaultValue='2' mt={4} onChange={e => { setInputData({ ...inputData, role: e }) }}>
+              <RadioGroup defaultValue='EMPLOYEE' mt={4} onChange={e => { setInputData({ ...inputData, role: e }) }}>
                 <Stack spacing={5} direction='row'>
                   <Radio colorScheme='teal' value='ADMIN'>
                     관리자

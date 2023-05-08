@@ -18,38 +18,50 @@ import * as qs from 'qs'
 import { useSearchParams } from 'react-router-dom'
 import { userUpdate } from '../../../service/auth.service'
 import { departmentGetList } from '../../../service/department.service'
+import { getData } from '../../../util/function.util'
 
 
-const AdminEmployeeUpdatePage = (props) => {
-  const { isOpen, onClose, onCloseComplete, updateUser } = props
+const AdminEmployeeUpdatePage = ({ isOpen, onClose, onCloseComplete, updateUser }) => {
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
-
   const [depData, setDepData] = useState([])
   const [searchParams, setSearchParams] = useSearchParams()
-
+  const [paginateOption, setPaginateOption] = useState({
+    hasNextPage: null,
+    hasPrevPage: null,
+    limit: null,
+    nextPage: null,
+    page: null,
+    pagingCounter: null,
+    prevPage: null,
+    totalDocs: null,
+    totalPages: null,
+  })
 
   useEffect(() => {
-    getDepartmentData()
-    // console.log('depData: ', depData);
-    // getUser()
+    getDepartment()
   }, [])
 
-
-  async function getDepartmentData() {
-    const paginationMeta = { limit: 100 }
-    const getDepartmentData = await departmentGetList(paginationMeta)
-    const { docs, ...option } = getDepartmentData.data
-
-    setSearchParams(paginationMeta, { replace: true })
-    setDepData(docs)
+  const getDepartment = () => {
+    let page = searchParams.get('page')
+    getData(page, departmentGetList, setSearchParams, setDepData, setPaginateOption)
   }
 
   const [inputData, setInputData] = useState({
-    name: null,
-    department: null,
-    _id: null,
+    name: updateUser?.name,
+    department: updateUser?.department?.department,
+    _id: updateUser?._id,
   })
+
+  // async function getDepartmentData() {
+  //   const paginationMeta = { limit: 100 }
+  //   const getDepartmentData = await departmentGetList(paginationMeta)
+  //   const { docs, ...option } = getDepartmentData.data
+
+  //   setSearchParams(paginationMeta, { replace: true })
+  //   setDepData(docs)
+  // }
+
 
   const employeeUpdate = async function () {
     const obj = {
@@ -57,7 +69,6 @@ const AdminEmployeeUpdatePage = (props) => {
       department: inputData.department,
       _id: updateUser._id,
     }
-    console.log(obj.department, obj.name, obj._id)
     await userUpdate(obj)
     onClose()
   }
@@ -87,14 +98,17 @@ const AdminEmployeeUpdatePage = (props) => {
           <FormControl mt={4}>
             <FormLabel>부서</FormLabel>
             <Select
-              defaultValue={updateUser.department}
+              defaultValue={updateUser?.department?.department}
               placeholder='Select option'
               onChange={e => { setInputData({ ...inputData, department: e.target.value }) }}
             >
               {
                 depData.map(dep => {
                   return (
-                    <option key={dep._id} value={dep._id}>{dep.department}</option>
+                    <option 
+                      key={dep._id} 
+                      value={dep._id}
+                    >{dep.department}</option>
                   )
                 })
               }

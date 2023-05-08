@@ -1,28 +1,27 @@
 import React from 'react'
 import { Outlet, Link, useNavigate, NavLink } from 'react-router-dom'
-import './admin-index.page.scss'
-import { HeaderComponent } from '../../component/header.component'
+// import './admin-index.page.scss'
+import { Header } from '../../layout/Header'
 import { FiHome, FiCheckSquare, FiUsers, FiMessageSquare } from "react-icons/fi";
 import { MdWorkspacesOutline } from "react-icons/md";
+import { styled } from '../../config/stitches.config';
+import { Nav } from '../../component/Nav';
+import { Section } from '../../layout/Section';
 
+const MainStyled = styled("main", {
+  width: "100%",
+  height: "100%",
+  display: "flex",
+})
 
 const AdminIndexPage = () => {
-
   return (
     <>
-      <HeaderComponent/>
-      <main>
-        <nav>
-          <NavLink to="/admin/home"><FiHome/>홈</NavLink>
-          <NavLink to="/admin/attendance"><FiCheckSquare/>직원출결현황</NavLink>
-          <NavLink to="/admin/employee"><FiUsers/>직원관리</NavLink>
-          <NavLink to="/admin/department"><MdWorkspacesOutline/> 부서관리</NavLink>
-          <NavLink to="/admin/notice"><FiMessageSquare/>공지사항</NavLink>
-        </nav>
-        <article>
-          <Outlet></Outlet>
-        </article>
-      </main>
+      <Header/>
+      <MainStyled>
+        <Nav/>
+        <Section/>
+      </MainStyled>
     </>
   )
 }

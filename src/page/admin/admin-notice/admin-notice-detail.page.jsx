@@ -1,17 +1,19 @@
+import React, { useState, useEffect } from 'react'
 import { 
-  Button, 
   FormControl, 
   Input, 
   Textarea, 
 } from '@chakra-ui/react'
-import React, { useState, useEffect } from 'react'
-import './admin-notice-regist.scss'
+import { Button } from '../../../component/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import ReactHtmlParser from "react-html-parser";
 import { commentGet, commentRegist, noticeGet } from '../../../service/notice.service';
 import { useRecoilState } from 'recoil';
 import { authState } from '../../../atom/auth.atom';
 import { format } from 'date-fns';
+import { styled } from '@stitches/react';
+import { ButtonsWrap } from '../../../component/ButtonsWrap';
+import { DetailPageStyled } from '../../../component/DetailPageStyled';
 
 const AdminNoticeDetailPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
@@ -20,6 +22,7 @@ const AdminNoticeDetailPage = () => {
   const [contents, setContents] = useState({
     title: '',
     content: '',
+    date: '',
   })
   const [comment, setComment] = useState({
     content: '',
@@ -29,11 +32,7 @@ const AdminNoticeDetailPage = () => {
   const [commentList, setCommentList] = useState([]);
   const [isEdit, setIsEdit] = useState(false);
   
-  useEffect(() => {
-    getNotice()
-    getComment()
-  }, [])
-
+  
   const getNotice = async () => {
     const { data } = await noticeGet(params.id)
     setContents(data)
@@ -57,56 +56,72 @@ const AdminNoticeDetailPage = () => {
     setCommentList( data )
   }
 
+  useEffect(() => {
+    getNotice()
+    getComment()
+  }, [])
+
   const list = commentList?.filter( comment => {
     return comment.noticeId === params.id
   })
 
-  const handleCommentEdit = async (e) => {
-    
-  }
-
   
 
   return (
-    <>
-      <h2>{contents.title}</h2>
-      
-      <div>{ReactHtmlParser(contents.content)}</div>
-
-      <div>
-        댓글
+    <DetailPageStyled>
+      <div className='title-wrap'>
+        <h3 className='title'>{contents.title}</h3>
+        {/* <p className='write-date'>{format(new Date(contents.date), 'yyyy-MM-dd hh:mm:ss')}</p> */}
+        {/* <p>{contents.userId.name}</p> */}
+      </div>
+      <div className='content'>{ReactHtmlParser(contents.content)}</div>
+      <div className='comment'>
+        <p>댓글 <span className='comment-length'>{list?.length}</span>개</p>
         <FormControl>
           <Textarea 
             onChange={handleCommentChange}
             placeholder='댓글을 입력하세요.'
             value={comment.content}
           ></Textarea>
-          <Button onClick={handleCommentSubmit}>작성</Button>
+          <Button 
+            className='comment-submit-btn'
+            color="primary" 
+            size="md" 
+            onClick={handleCommentSubmit}
+          >댓글 쓰기</Button>
         </FormControl>
-
-        
-        { list?.map(comment => {
-          return (
-            <div key={comment._id}>
-              {isEdit ? (
-                <div>
-                  <Input></Input>
-                  <Button>수정</Button>
-                  <Button>취소</Button>
+        <div className='comment-list'>
+          { list?.map(comment => {
+            return (
+              <div key={comment._id}>
+                <div className='comment-list-wrap'>
+                {isEdit ? (
+                  <>
+                    <Input></Input>
+                    <ButtonsWrap>
+                      <Button color="primary" size="sm">수정</Button>
+                      <Button color="outline" size="sm">취소</Button>
+                    </ButtonsWrap>
+                  </>
+                ) : (
+                  <>
+                    <div className='comment-list-info'>
+                      {comment.userId.name}
+                      <span className='write-date'>{format(new Date(comment.date), 'yyyy-MM-dd hh:mm:ss')}</span>
+                    </div>
+                    <div className='comment-list-content'>
+                      <p>{comment.content}</p>
+                      <Button color="outline" size="sm">수정</Button>
+                    </div>
+                  </>
+                )}
                 </div>
-              ) : (
-                <div>
-                  {comment.userId.name}
-                  {format(new Date(comment.date), 'yyyy-MM-dd hh:mm:ss')}
-                  {comment.content}
-                  <Button>수정</Button>
-                </div>
-              )}
-            </div>
-          )
-        })}
+              </div>
+            )
+          })}
+        </div>
       </div>
-    </>
+    </DetailPageStyled>
   )
 }
 

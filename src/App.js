@@ -2,10 +2,10 @@ import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import LoginIndexPage from './page/login/login-index.page';
 import EmployeeIndexPage from './page/employee/employee-index.page';
-import AdminAttendancePage from './page/admin/admin-attendance.page';
+import AdminAttendancePage from './page/admin/admin-attendance/admin-attendance.page';
 import AdminIndexPage from './page/admin/admin-index.page';
 import AdminEmployeePage from './page/admin/admin-employee/admin-employee.page';
-import AdminSettingDepartmentPage from './page/admin/admine-setting-department/admin-setting-department.page'
+import AdminSettingDepartmentPage from './page/admin/admine-department/admin-department.page'
 import { useRecoilCallback, useRecoilState } from 'recoil';
 import { useEffect, useState } from 'react';
 import { sessionVerify } from './service/auth.service';

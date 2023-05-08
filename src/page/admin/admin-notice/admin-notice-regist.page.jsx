@@ -1,10 +1,12 @@
-import { Button, FormControl, Input, Textarea } from '@chakra-ui/react'
+import { FormControl, Input, Textarea } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import './admin-notice-regist.scss'
+import { Button } from '../../../component/Button'
 import { useNavigate } from 'react-router-dom';
 import { noticeRegist } from '../../../service/notice.service';
+import { RegistEditPageStyled } from '../../../component/RegistEditPageStyled';
+import { ButtonsWrap } from '../../../component/ButtonsWrap';
 
 const AdminNoticeRegistPage = () => {
   const [inputData, setInputData] = useState({
@@ -33,14 +35,16 @@ const AdminNoticeRegistPage = () => {
   }
 
   return (
-    <>
+    <RegistEditPageStyled>
       <FormControl>
         <Input 
+          className='title'
           name='title'
           placeholder='제목을 입력하세요.'
           onChange={handleTitleChange}
         />
         <CKEditor
+          
           editor={ ClassicEditor }
           config={{
             placeholder: "내용을 입력하세요.",
@@ -53,11 +57,21 @@ const AdminNoticeRegistPage = () => {
                 content: data,
               })
           } }
-      />      
-        <Button onClick={() => navigate(-1)}>뒤로</Button>
-        <Button onClick={handleSubmit}>제출</Button>
+      />
+        <ButtonsWrap>
+          <Button 
+            color="outline"
+            size="md"
+            onClick={() => navigate(-1)}
+          >뒤로</Button>
+          <Button 
+            color="primary"
+            size="md"
+            onClick={handleSubmit}
+          >제출</Button>
+        </ButtonsWrap>      
       </FormControl>
-    </>
+    </RegistEditPageStyled>
   )
 }
 

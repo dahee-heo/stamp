@@ -1,38 +1,54 @@
-import { Table, TableContainer, Tbody, Th, Thead, Tr } from '@chakra-ui/react'
-import React from 'react'
+import { Badge, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react';
+import { Button } from '../../../component/Button';
+import { StatsCard } from '../../../component/StatsCard';
+import { styled } from '../../../config/stitches.config';
+import { noticeGetList } from '../../../service/notice.service';
+import { adminAttendanceGetList } from '../../../service/admin-attendance.service';
+import { format } from 'date-fns';
+import { ko } from 'date-fns/locale';
+import { BarChart } from '../../../component/BarChart';
 
 const AdminDashboardPage = () => {
+  const [statsTitle, setStatsTitle] = useState([
+    {title: '출근 미체크', count: 0}, 
+    {title: '퇴근 미체크', count: 1}, 
+    {title: "늦은 출근", count: 3}, 
+    {title: "이른 퇴근", count: 0}
+  ])
+  const [noticeList, setNoticeList] = useState({})
+  const [attendanceList, setAttendanceList] = useState({})
+
+  const StatsWrap = styled('div', {
+    width: "99%",
+    display: "flex",
+    flexDirection: "row",
+    "@md": {
+      flexWrap: "wrap",
+    }
+  })
+
+
   return (
-    <main>
+    <>
       <h2>전사 근태 통계</h2>
-      <section>
+      <section className='stats'>
         <div>
           <div>
             <p>직원 평균 근로 시간</p>
             <p>단위: 주</p>
           </div>
-          <figure></figure>
+          <BarChart/>
         </div>
-        <div>
-          <div>
-            <p>출근 미체크</p>
-            <p>0</p>
-          </div>
-          <div>
-            <p>퇴근 미체크</p>
-            <p>10</p>
-          </div>
-          <div>
-            <p>늦은 출근</p>
-            <p>2</p>
-          </div>
-          <div>
-            <p>이른 퇴근</p>
-            <p>0</p>
-          </div>
-        </div>
+        <StatsWrap>
+          { statsTitle?.map((stats, idx) => {
+            return (
+              <StatsCard stats={stats} key={idx}/>
+            )
+          }) }
+        </StatsWrap>
       </section>
-      <section>
+      <section className='attendance-table'>
         <TableContainer>
           <Table variant='striped' size="sm" maxWidth="100%">
             <Thead>
@@ -47,13 +63,26 @@ const AdminDashboardPage = () => {
               </Tr>
             </Thead>
             <Tbody>
-
-              
+            {
+              // attendanceList?.map((ele) => {
+              //   return (
+              //     <Tr key={ele._id}>
+              //       <Td>{ele.userId.name}</Td>
+              //       <Td><Badge>{ele.userId.department.department}</Badge></Td>
+              //       <Td>{format(new Date(+ele.datetime), 'yyyy-MM-dd')}</Td>
+              //       <Td>{format(new Date(+ele.datetime), 'EEEE', { locale: ko })}</Td>
+              //       <Td>{format(new Date(+ele.datetime), 'hh:mm:ss')}</Td>
+              //       <Td>{ele?.leave?.datetime ? format(new Date(+ele?.leave?.datetime), 'hh:mm:ss') : 'NOT_FOUND'}</Td>
+              //       <Td>{ele?.diffFormat}</Td>
+              //     </Tr>
+              //   )
+              // })
+            }
             </Tbody>
           </Table>
         </TableContainer>
       </section>
-      <section>
+      <section className='notice-table'>
         <TableContainer>
           <Table variant='striped' size="sm" maxWidth="100%">
             <Thead>
@@ -71,7 +100,7 @@ const AdminDashboardPage = () => {
           </Table>
         </TableContainer>
       </section>
-    </main>
+    </>
   )
 }
 

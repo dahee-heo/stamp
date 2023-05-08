@@ -21,7 +21,7 @@ export const userRegist = async (userParams) => {
 
 
 export const userUpdate = async (userUpdateParams) => {
-  return await axios.put(`${hostUrl}/auth/user-update`, userUpdateParams)
+  return await axios.patch(`${hostUrl}/auth/user-update`, userUpdateParams)
 }
 
 export const myInfoIdUpdate = async (params) => {
