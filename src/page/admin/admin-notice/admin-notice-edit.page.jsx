@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { noticeGet, noticeUpdate } from '../../../service/notice.service';
 import { Button } from '../../../component/Button';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
-import { RegistEditPageStyled } from '../../../component/RegistEditPageStyled';
+import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
 
 const AdminNoticeEditPage = () => {
   const navigate = useNavigate();

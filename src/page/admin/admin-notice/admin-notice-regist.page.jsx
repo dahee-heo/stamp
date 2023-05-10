@@ -5,7 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button } from '../../../component/Button'
 import { useNavigate } from 'react-router-dom';
 import { noticeRegist } from '../../../service/notice.service';
-import { RegistEditPageStyled } from '../../../component/RegistEditPageStyled';
+import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
 
 const AdminNoticeRegistPage = () => {

@@ -13,7 +13,7 @@ import { authState } from '../../../atom/auth.atom';
 import { format } from 'date-fns';
 import { styled } from '@stitches/react';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
-import { DetailPageStyled } from '../../../component/DetailPageStyled';
+import { DetailPageStyled } from '../../../style/DetailPageStyled';
 
 const AdminNoticeDetailPage = () => {
   const [auth, setAuth] = useRecoilState(authState)

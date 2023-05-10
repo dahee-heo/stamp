@@ -85,7 +85,7 @@ const AdminAttendancePage = () => {
       <div className='admin-section-wrap'>
         <h2>출결현황</h2>
         <div className='filter-wrap'>
-          <label className='date-label'>날짜</label>
+          <label className='date-label filter-label'>날짜</label>
           <Stack spacing={4} direction='row' align='center'>
             <DatePicker
               selected={startDate}
@@ -98,13 +98,6 @@ const AdminAttendancePage = () => {
           </Stack>
           <p className='date-reset'
             onClick={() => loadAdminAttendance({ start: null, end: null })}
-            style={{
-              marginLeft: '10px',
-              fontSize: '14px',
-              fontWeight: '700',
-              color: '#666',
-              cursor: 'pointer'
-            }}
           ><RepeatIcon /> 초기화</p>
         </div>
 

@@ -30,8 +30,9 @@ const NavStyled = styled("nav", {
   "@sm": { display: "none" },
 })
 
+
 export const Nav = () => {
-  return (
+    return (
     <NavStyled>
       <NavLink to="/admin/home"><FiHome/>홈</NavLink>
       <NavLink to="/admin/attendance"><FiCheckSquare/>직원출결현황</NavLink>

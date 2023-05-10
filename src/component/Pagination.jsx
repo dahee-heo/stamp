@@ -62,15 +62,27 @@ const Pagination = ({ paginateOption, loadPage, onPrev, onNext }) => {
   return (
     <PaginationStyled>
       <div className='pagination'>
-        <button className='pagination-prev-button' onClick={() => { onPrev(page) }}><ChevronLeftIcon /></button>
+        <button 
+          className='pagination-prev-button' 
+          onClick={() => { onPrev(page) }}
+        ><ChevronLeftIcon />
+        </button>
         {
           pageArray.map((ele) => {
             return (
-              <span className={ele === page ? 'active' : ''} key={ele} onClick={() => { loadPage(ele) }}>{ele}</span>
+              <span 
+                className={ele === page ? 'active' : ''} 
+                key={ele} 
+                onClick={() => { loadPage(ele) }}
+              >{ele}</span>
             )
           })
         }
-        <button className='pagination-next-button' onClick={() => { onNext(page) }}><ChevronRightIcon /></button>
+        <button 
+          className='pagination-next-button' 
+          onClick={() => { onNext(page) }}
+          ><ChevronRightIcon />
+        </button>
       </div>
     </PaginationStyled>
   )

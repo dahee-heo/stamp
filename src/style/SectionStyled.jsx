@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 import { styled } from '../config/stitches.config';
 
-const SectionStyled = styled("section", {
-  padding: "45px 80px 0",
+export const SectionStyled = styled("section", {
+  padding: "45px 200px 0 80px",
   fontFamily: "$system",
   flex: "1",
-  ".admin-section-wrap": {
+  ".admin-section-wrap, .employee-section-wrap": {
     display: "flex",
     flexDirection: "column",
   },
@@ -17,11 +17,12 @@ const SectionStyled = styled("section", {
   ".filter-wrap": {
     display: "flex",
     alignItems: "center",
+    width: "100%",
     "label": {
       marginRight: "20px"
     },
   },
-  "label": {
+  "label.filter-label": {
     fontWeight: "$bold",
   },
   ".add-btn": {
@@ -31,15 +32,21 @@ const SectionStyled = styled("section", {
   "table": {
     marginTop: "20px",
   },
+  ".date-reset": {
+    marginLeft: '10px',
+    fontSize: '14px',
+    fontWeight: '700',
+    color: '$gray500',
+    cursor: 'pointer',
+  },
   "@sm": { 
-    padding: "45px 40px" 
+    width: "100%",
+    padding: "36px 25px", 
+    ".filter-wrap": {
+      flexWrap: "wrap",
+    },
+    ".css-xumdn4, .css-1zts0j": {
+      padding: "12px 15px",
+    }
   },
 })
-
-export const Section = () => {
-  return (
-    <SectionStyled>
-      <Outlet></Outlet>
-    </SectionStyled>
-  )
-}

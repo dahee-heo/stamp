@@ -1,5 +1,5 @@
 import React from 'react';
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiMenu } from "react-icons/fi";
 import { useRecoilState } from 'recoil';
 import { authState, initialAuthState } from '../atom/auth.atom';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -24,6 +24,10 @@ const HeaderStyled = styled("header", {
       fontSize: "20px",
       fontWeight: "800",
     },
+    ".mobile-menu": { 
+      display: "none",
+      "@sm": { display: "block" } 
+    },
     "p": { fontWeight: "400", marginLeft: "8px", }
   },
   "ul": {
@@ -34,22 +38,38 @@ const HeaderStyled = styled("header", {
     "li": { 
       fontSize: "14px",
       fontWeight: "500",
-      "&:first-child::after": {
-        content: "",
-        borderRight: "1px solid white",
-        margin: "0 8px",
-        display: "inline-block",
-        height: "10px",
-      },
+      // "&:first-child::after": {
+      //   content: "",
+      //   borderRight: "1px solid white",
+      //   margin: "0 8px",
+      //   display: "inline-block",
+      //   height: "10px",
+      // },
       "svg": { marginLeft: "12px", }
+    },
+    ".logout": {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      cursor: "pointer",
+      "svg" : { marginRight: "2px"},
     }
-  }
+  },
+
+  "@sm": {
+    padding: "0 25px",
+    ".admin-mark, .logo": {
+      display: "none"
+    },
+    // ".mobile-menu": { 
+    //   display: "block" 
+    // },
+  },
 })
 
-export const Header = () => {
+export const Header = ({setMobileNavOpen}) => {
   const nav = useNavigate()
   const location = useLocation();
-
   const [auth, setAuth] = useRecoilState(authState)
   const logout = async function () {
     await authLogout()
@@ -60,14 +80,18 @@ export const Header = () => {
   return (
     <HeaderStyled>
       <div className='title'>
-        <h1>Stamp</h1>
-        {location.pathname.includes("/admin") && <p>관리자페이지</p>}
+        <h1 className='logo'>Stamp</h1>
+        {location.pathname.includes("/admin") && 
+          <h1 className='mobile-menu'><FiMenu onClick={()=>setMobileNavOpen(true)}/></h1>
+        }
+        {location.pathname.includes("/admin") && 
+          <p className='admin-mark'>관리자페이지</p>
+        }
       </div>
       <div>
         <ul>
           <li>{auth?.name}</li>
-          <li></li>
-          <li onClick={logout}><FiLogOut/></li>
+          <li className='logout' onClick={logout}><FiLogOut/>로그아웃</li>
         </ul>
       </div>
     </HeaderStyled>
