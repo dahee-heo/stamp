@@ -8,29 +8,23 @@ import {
   Tbody,
   Td,
   Badge,
-  Button,
 } from '@chakra-ui/react'
-
-import './admin-employee.page.scss'
+import { Button } from '../../../component/Button';
+import { ButtonsWrap } from '../../../component/ButtonsWrap';
 import { useDisclosure } from '@chakra-ui/react'
 import AdminEmployeeRegistPage from './admin-employee-regist.page'
-import axios from 'axios'
 import { useSearchParams } from 'react-router-dom'
-import * as qs from 'qs'
-import PaginationComponent from '../../../component/pagination.component'
 import AdminEmployeeUpdatePage from './admin-employee-update.page'
 import { employeeDelete } from '../../../service/auth.service'
 import { userGetList } from '../../../service/user.service'
-
-
+import { getData } from '../../../util/function.util';
+import Pagination from '../../../component/Pagination';
 
 const AdminEmployeePage = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
-
   const initialRef = React.useRef(null)
   const finalRef = React.useRef(null)
-
   const [userData, setUserData] = useState([])
   const [updateData, setUpdateData] = useState({})
   const [paginateOption, setPaginateOption] = useState({
@@ -49,64 +43,44 @@ const AdminEmployeePage = () => {
   const [searchParams, setSearchParams] = useSearchParams()
 
   useEffect(() => {
-    let page = searchParams.get('page')
-    // console.log('effect page: ', page);
-    loadUser(page)
+    getUser()
   }, [])
-
-  const loadUser = async function (page = 1) {
-    // console.log('load page: ', page);
-    const paginationMeta = { page: page ?? 1, limit: 10 }
-    const getUserData = await userGetList(paginationMeta)
-    // console.log('getUserData: ', getUserData);
-    const { docs, ...option } = getUserData.data
-    // console.log('docs: ', docs);
-
-    setSearchParams(paginationMeta, { replace: true })
-    setUserData(docs)
-    setPaginateOption(option)
-
-    const pagenation = (page, limit, totalPages) => {
-      const pageNum = []
-
-      let a = Math.floor(page / limit)
-      let start = a * limit + 1
-      let end = start + limit - 1
-      end = end > totalPages ? totalPages : end
-      for (let i = start; i < end + 1; i++) {
-        pageNum.push(i)
-      }
-      setPageArray(pageNum)
-    }
-
-    pagenation(option.page, option.limit, option.totalPages)
+  
+  const getUser = () => {
+    let page = searchParams.get('page')
+    getData(page, userGetList, setSearchParams, setUserData, setPaginateOption)
   }
 
   async function userDelete(id) {
     const res = await employeeDelete(id)
-    loadUser(paginateOption.page)
+    getData(paginateOption.page, userGetList, setSearchParams, setUserData, setPaginateOption)
   }
 
   return (
 
-    <div className='admin-employee-list'>
+    <div className='admin-section-wrap'>
       <h2>직원관리</h2>
-      <div className='employee-add-btn'>
-        <Button onClick={onOpen} colorScheme='teal'>+직원등록</Button>
+      <div className='add-btn'>
+        <Button 
+          color="primary" 
+          size="md" 
+          onClick={onOpen}
+        >+직원등록</Button>
       </div>
       <AdminEmployeeRegistPage
         isOpen={isOpen}
         onClose={onClose}
+        onCloseComplete={getUser}
       ></AdminEmployeeRegistPage>
       <AdminEmployeeUpdatePage
         isOpen={updateOpen}
         onClose={updateOnClose}
-        onCloseComplete={loadUser}
+        onCloseComplete={getUser}
         input={userData}
         updateUser={updateData}
       ></AdminEmployeeUpdatePage>
       <TableContainer className='employee-table'>
-        <Table variant='striped'>
+        <Table>
           <Thead>
             <Tr>
               <Th>이름</Th>
@@ -122,47 +96,49 @@ const AdminEmployeePage = () => {
                 return (
                   <Tr key={user._id}>
                     <Td>{user.name}</Td>
-                    <Td><Badge colorScheme='green'>{user?.department?.department}</Badge></Td>
+                    <Td><Badge>{user?.department?.department}</Badge></Td>
                     <Td>{user.id}</Td>
                     <Td isNumeric>
-                      <Button colorScheme='teal' size='xs' onClick={() => {
-                        setUpdateData(() => user)
-                        updateOnOpen()
-                      }}>
-                        수정
-                      </Button>
-                      <Button
-                        variant='outline'
-                        colorScheme='teal'
-                        size='xs'
-                        onClick={() => { userDelete(user._id) }}
-                      >
-                        삭제
-                      </Button>
+                      <ButtonsWrap>
+                        <Button 
+                          color="primary"
+                          size="sm"
+                          onClick={() => {
+                            setUpdateData(() => user)
+                            updateOnOpen()
+                          }}
+                        >
+                          수정
+                        </Button>
+                        <Button
+                          color="outline"
+                          size='sm'
+                          onClick={() => { userDelete(user._id) }}
+                        >
+                          삭제
+                        </Button>
+                      </ButtonsWrap>
                     </Td>
                   </Tr>
                 )
               })
             }
-
           </Tbody>
         </Table>
       </TableContainer>
 
-
-
-      <PaginationComponent
+      <Pagination
         paginateOption={paginateOption}
         onPrev={(pageIndex) => {
-          loadUser(pageIndex - 1)
+          getData(pageIndex - 1)
         }}
         loadPage={(pageIndex) => {
-          loadUser(pageIndex)
+          getData(pageIndex)
         }}
         onNext={(pageIndex) => {
-          loadUser(pageIndex + 1)
+          getData(pageIndex + 1)
         }}
-      ></PaginationComponent>
+      ></Pagination>
     </div >
   )
 }

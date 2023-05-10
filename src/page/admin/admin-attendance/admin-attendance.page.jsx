@@ -1,12 +1,13 @@
 import React, { forwardRef, useEffect, useState } from 'react'
-import { Stack, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td } from '@chakra-ui/react'
+import { Stack, Button, TableContainer, Table, Thead, Tr, Th, Tbody, Td, Badge } from '@chakra-ui/react'
 import DatePicker from "react-datepicker";
 import { useSearchParams } from 'react-router-dom'
-import { adminAttendanceGetList } from '../../service/admin-attendance.service';
+import { adminAttendanceGetList } from '../../../service/admin-attendance.service';
 import { format, differenceInSeconds } from 'date-fns'
 import { ko } from 'date-fns/locale'
 import { RepeatIcon } from '@chakra-ui/icons';
-import PaginationComponent from '../../component/pagination.component';
+import { timeFormat } from '../../../util/function.util';
+import Pagination from '../../../component/Pagination';
 
 
 const AdminAttendancePage = () => {
@@ -52,7 +53,6 @@ const AdminAttendancePage = () => {
       loadAdminAttendance(params)
     }
   };
-
   const loadAdminAttendance = async function ({ page, start, end, type }) {
     const paginationMeta = {
       page: page ?? 1,
@@ -63,35 +63,29 @@ const AdminAttendancePage = () => {
     }
 
     const getAdminAttendanceData = await adminAttendanceGetList(paginationMeta)
-    // console.log('getAdminAttendanceData: ', getAdminAttendanceData);
     const { docs, ...option } = getAdminAttendanceData.data
-    // console.log('docs: ', docs);
 
-    docs.map((ele) => {
-      if (!ele?.leave?.datetime || !ele?.datetime) return
-
-      const diffSeconds = differenceInSeconds(new Date(+ele?.leave?.datetime), new Date(+ele?.datetime))
-      const hours = Math.floor(diffSeconds / (60 * 60))
-      const hourRest = diffSeconds % (60 * 60)
-      const minuites = Math.floor(hourRest / 60)
-      const minuiteRest = hourRest % 60
-      const seconds = minuiteRest
-      ele.diffFormat = `${hours} 시간 ${minuites} 분 ${seconds} 초`
+    docs.map((attendance) => {
+      if (!attendance?.leave?.datetime || !attendance?.datetime) return
+      timeFormat(attendance)
     })
-
+    
     setSearchParams(paginationMeta, { replace: true })
     setAdminAttendanceData(docs)
     setPaginateOption(option)
   }
 
-
-
+  const total = adminAttendanceData.reduce((acc, current) => {
+    return acc + current.totalSeconds
+  }, 0)
+  console.log('total: ', total, total/(60*60));
+  
   return (
-    <div className='admin-attendance-wrap'>
-      <div className='admin-attendance-list'>
+    <div className='admin-section-wrap'>
+      <div className='admin-section-wrap'>
         <h2>출결현황</h2>
-        <div className='filter-date'>
-          <label className='date-label'>날짜</label>
+        <div className='filter-wrap'>
+          <label className='date-label filter-label'>날짜</label>
           <Stack spacing={4} direction='row' align='center'>
             <DatePicker
               selected={startDate}
@@ -104,18 +98,11 @@ const AdminAttendancePage = () => {
           </Stack>
           <p className='date-reset'
             onClick={() => loadAdminAttendance({ start: null, end: null })}
-            style={{
-              marginLeft: '10px',
-              fontSize: '14px',
-              fontWeight: '700',
-              color: '#666',
-              cursor: 'pointer'
-            }}
           ><RepeatIcon /> 초기화</p>
         </div>
 
         <TableContainer>
-          <Table variant='striped'>
+          <Table>
             <Thead>
               <Tr>
                 <Th>이름</Th>
@@ -134,7 +121,7 @@ const AdminAttendancePage = () => {
                   return (
                     <Tr key={ele._id}>
                       <Td>{ele.userId.name}</Td>
-                      <Td>{ele.userId.department.department}</Td>
+                      <Td><Badge>{ele.userId.department.department}</Badge></Td>
                       <Td>{format(new Date(+ele.datetime), 'yyyy-MM-dd')}</Td>
                       <Td>{format(new Date(+ele.datetime), 'EEEE', { locale: ko })}</Td>
                       <Td>{format(new Date(+ele.datetime), 'hh:mm:ss')}</Td>
@@ -144,12 +131,11 @@ const AdminAttendancePage = () => {
                   )
                 })
               }
-              {/* <PaginationComponent></PaginationComponent> */}
             </Tbody>
           </Table>
         </TableContainer>
 
-        <PaginationComponent
+        <Pagination
           paginateOption={paginateOption}
           onPrev={(pageIndex) => {
             loadAdminAttendance({ page: pageIndex - 1 })

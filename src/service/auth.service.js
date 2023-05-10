@@ -21,18 +21,18 @@ export const userRegist = async (userParams) => {
 
 
 export const userUpdate = async (userUpdateParams) => {
-  return await axios.put(`${hostUrl}/auth/user-update`, userUpdateParams)
+  return await axios.patch(`${hostUrl}/auth/user-update`, userUpdateParams)
 }
 
-export const myInfoIdUpdate = async (myInfoUpdateParams) => {
-  return await axios.put(`${hostUrl}/auth/myinfo-id-update`, myInfoUpdateParams)
+export const myInfoIdUpdate = async (params) => {
+  return await axios.put(`${hostUrl}/auth/myinfo-id-update`, params)
 }
-export const myInfoPwUpdate = async (myInfoUpdateParams) => {
-  return await axios.put(`${hostUrl}/auth/myinfo-pw-update`, myInfoUpdateParams)
+export const myInfoPwUpdate = async (params) => {
+  return await axios.put(`${hostUrl}/auth/myinfo-pw-update`, params)
 }
 
-export const employeeDelete = async (employeeDeleteParams) => {
-  return await axios.delete(`${hostUrl}/auth/${employeeDeleteParams}`)
+export const employeeDelete = async (params) => {
+  return await axios.delete(`${hostUrl}/auth/${params}`)
 }
 
 export const sessionVerify = async () => {

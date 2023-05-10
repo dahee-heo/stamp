@@ -3,8 +3,8 @@ import axios from "axios";
 
 const hostUrl = getHostUrl()
 
-export const attendanceCreate = async (attendanceParams) => {
-  return await axios.post(`${hostUrl}/attendance`, attendanceParams)
+export const attendanceCreate = async (params) => {
+  return await axios.post(`${hostUrl}/attendance`, params)
 }
 
 export const attendanceGetList = async (paginationMeta) => {
@@ -13,6 +13,6 @@ export const attendanceGetList = async (paginationMeta) => {
   return await axios.get(url)
 }
 
-export const attendanceRead = async (attendanceReadParams) => {
-  return await axios.get(`${hostUrl}/attendance/state`, attendanceReadParams)
+export const attendanceRead = async (params) => {
+  return await axios.get(`${hostUrl}/attendance/state`, params)
 }
