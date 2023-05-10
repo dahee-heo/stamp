@@ -3,10 +3,9 @@ import { styled } from '../config/stitches.config';
 const StatsCardStyled = styled("div", {
   border: "1px solid $gray300",
   borderRadius: "5px",
-  width: "200px",
+  width: "25%",
   height: "100px",
-  marginRight: "8px",
-  marginBottom: "8px",
+  margin: "4px",
   padding: "10px 16px",
   "h3": {
     fontWeight: "$bold",
@@ -20,7 +19,8 @@ const StatsCardStyled = styled("div", {
   },
   ".zero": {
     color: "$gray500"
-  }
+  },
+  "@md" : { width: "47%", },
 })
 
 export const StatsCard = ({stats}) => {

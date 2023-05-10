@@ -34,7 +34,7 @@ const NavStyled = styled("nav", {
 export const Nav = () => {
     return (
     <NavStyled>
-      <NavLink to="/admin/home"><FiHome/>홈</NavLink>
+      {/* <NavLink to="/admin/home"><FiHome/>홈</NavLink> */}
       <NavLink to="/admin/attendance"><FiCheckSquare/>직원출결현황</NavLink>
       <NavLink to="/admin/employee"><FiUsers/>직원관리</NavLink>
       <NavLink to="/admin/department"><MdWorkspacesOutline/> 부서관리</NavLink>

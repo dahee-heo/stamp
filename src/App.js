@@ -73,7 +73,7 @@ function App() {
                   <AdminIndexPage/>
                 </AuthGuard>
               }>
-                <Route path='' element={<Navigate to='home' replace />}></Route>
+                <Route path='' element={<Navigate to='attendance' replace />}></Route>
                 <Route path='home' element={<AdminDashboardPage/>}></Route>
                 <Route path='attendance' element={<AdminAttendancePage/>}></Route>
                 <Route path='employee' element={<AdminEmployeePage/>}></Route>

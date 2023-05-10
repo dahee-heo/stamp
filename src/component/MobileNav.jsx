@@ -67,10 +67,10 @@ export const MobileNav = ({ setMobileNavOpen, pathname }) => {
     <MobileNavStyled>
       <div className='close-btn' onClick={() => setMobileNavOpen(false)}><FiX/></div>
       <ul>
-        <li 
+        {/* <li 
           className={activeClass('home')}
           onClick={()=>{menuClick('home')}}
-        ><FiHome/>홈</li>
+        ><FiHome/>홈</li> */}
         <li 
           className={activeClass('attendance')}
           onClick={()=>{menuClick('attendance')}}
