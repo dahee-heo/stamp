@@ -37,6 +37,9 @@ export const DetailPageStyled = styled("div", {
     margin: "8px 0",
     borderBottom: "1px solid $gray300",
   },
+  ".comment-edit-wrap": {
+    marginBottom: "8px"
+  },
   ".comment-list-info": {
     display: "flex",
     margin: "8px 0",
@@ -56,5 +59,8 @@ export const DetailPageStyled = styled("div", {
     marginLeft: "10px",
     color: "$gray500"
   },
-  
+  "input": {
+    height: "50px",
+    marginBottom: "4px"
+  }
 })

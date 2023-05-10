@@ -36,3 +36,6 @@ export const commentGet = async (params) => {
   return await axios.get(`${hostUrl}/notice/${params}/comment`)
 }
 
+export const commentUpdate = async (params) => {
+  return await axios.patch(`${hostUrl}/notice/${params.noticeId}/comment`, params)
+}
