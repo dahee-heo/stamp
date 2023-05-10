@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import './login-index.page.scss'
 import {
   FormControl,
   FormLabel,
@@ -15,6 +14,7 @@ import { authLogin } from '../../service/auth.service'
 import { useRecoilState } from 'recoil'
 import { authState } from '../../atom/auth.atom'
 import { useController, useForm } from 'react-hook-form'
+import { styled } from '../../config/stitches.config'
 
 
 const LoginIndexPage = () => {
@@ -66,9 +66,43 @@ const LoginIndexPage = () => {
   //   })    
   // }
 
+  const LoginIndexStyled = styled('main', {
+    display: "flex",
+    justifyContent: "center",
+    height: "100vh",
+    minHeight: "380px",
+  
+    ".login__form": {
+      flexShrink: 0,
+      width: "320px",
+      position: "relative",
+      marginTop: "10vh",
+  
+      ".form-label": {
+        fontSize: "30px",
+        marginBottom: "40px",
+        textAlign: "center",
+        fontWeight: "800",
+      },
+  
+      ".form-control": {
+        marginBottom: "20px",
+  
+        "&.user-choice-radio": {
+          marginBottom: "40px",
+        }
+      },
+  
+      ".login-btn": {
+        width: "100%",
+      }
+    }
+  
+  })
+
 
   return (
-    <main className='login'>
+    <LoginIndexStyled>
       <div className='login__form'>
         <h1 className='form-label'>로그인</h1>
         <form onSubmit={handleSubmit(submit)}>
@@ -137,7 +171,7 @@ const LoginIndexPage = () => {
           >로그인</Button>
         </form>
       </div>
-    </main>
+    </LoginIndexStyled>
 
 
   )
