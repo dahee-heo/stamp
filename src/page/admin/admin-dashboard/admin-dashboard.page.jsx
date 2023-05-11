@@ -12,6 +12,29 @@ import { ButtonsWrap } from '../../../component/ButtonsWrap';
 import { adminAttendanceGetList } from '../../../service/admin-attendance.service';
 import { ko } from 'date-fns/locale';
 
+const StatsWrap = styled('div', {
+  width: "100%",
+  display: "flex",
+  flexDirection: "row",
+  justifyContent: "space-between",
+  "@md": {
+    flexWrap: "wrap",
+  }
+})
+
+const ChartWrap = styled('div', {
+  ".chart-title": {
+    display: "flex", 
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: "10px",
+    ":last-child": {
+      fontSize: "14px", 
+      color: "$gray500",
+    }
+  },
+})
+
 const AdminDashboardPage = () => {
   const [statsTitle, setStatsTitle] = useState([
     {title: '출근 미체크', count: 0}, 
@@ -32,29 +55,6 @@ const AdminDashboardPage = () => {
     prevPage: null,
     totalDocs: null,
     totalPages: null,
-  })
-
-  const StatsWrap = styled('div', {
-    width: "100%",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    "@md": {
-      flexWrap: "wrap",
-    }
-  })
-
-  const ChartWrap = styled('div', {
-    ".chart-title": {
-      display: "flex", 
-      flexDirection: "row",
-      justifyContent: "space-between",
-      marginBottom: "10px",
-      ":last-child": {
-        fontSize: "14px", 
-        color: "$gray500",
-      }
-    },
   })
 
   let page = searchParams.get('page')

@@ -3,11 +3,43 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Button,
 } from '@chakra-ui/react'
 import { authRegist } from '../../service/auth.service'
-import './admin-regist.page.scss'
+import { styled } from '../../config/stitches.config'
+import { Button } from '../../component/Button'
 
+const AdminRegistPageStyled = styled('main', {
+    display: "flex",
+    justifyContent: "center",
+    height: "100vh",
+    minHeight: "380px",
+  
+    ".admin-regist-form": {
+      flexShrink: 0,
+      width: "320px",
+      position: "relative",
+      marginTop: "10vh",
+  
+      ".form-label": {
+        fontSize: "30px",
+        marginBottom: "40px",
+        textAlign: "center",
+        fontWeight: "800",
+      },
+  
+      ".form-control": {
+        marginBottom: "20px",
+  
+        "&.user-choice-radio": {
+          marginBottom: "40px",
+        }
+      },
+  
+      ".regist-btn": {
+        width: "100%",
+      }
+    }
+})
 
 const AdminRegistPage = () => {
 
@@ -27,8 +59,8 @@ const AdminRegistPage = () => {
   }
 
   return (
-    <main className='admin-regist'>
-      <div className='admin-regist__form'>
+    <AdminRegistPageStyled>
+      <div className='admin-regist-form'>
         <h1 className='form-label'>관리자 등록</h1>
         <FormControl className="form-control">
           <FormLabel>이름</FormLabel>
@@ -49,11 +81,17 @@ const AdminRegistPage = () => {
               setInputData({ ...inputData, password: e.target.value })
             }} />
         </FormControl>
-        <Button className='regist-btn' colorScheme='teal' mr={3} onClick={adminRegist}>
+        <Button
+          className='regist-btn' 
+          color="primary"
+          size="md"
+          mr={3} 
+          onClick={adminRegist}
+        >
           등록
         </Button>
       </div>
-    </main>
+    </AdminRegistPageStyled>
   )
 }
 
