@@ -5,7 +5,6 @@ import {
   Input,
 } from '@chakra-ui/react'
 import { authRegist } from '../../service/auth.service'
-import './admin-regist.page.scss'
 import { styled } from '../../config/stitches.config'
 import { Button } from '../../component/Button'
 
