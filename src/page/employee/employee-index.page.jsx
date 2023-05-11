@@ -23,6 +23,52 @@ import { AttendanceCheck } from '../../component/AttendanceCheck';
 import { SectionStyled } from '../../style/SectionStyled';
 import { Header } from '../../layout/Header';
 
+const EmployeeIndexStyled = styled('div', {
+  display: "flex",
+  height: "100vh",
+  "@md": {
+    width: "100%",
+  },
+  ".commute": {
+    display: "flex",
+    overflow: "hidden",
+    width: "100%",
+    "@md": {
+      flexWrap: "wrap",
+    },
+    "&__list": {
+      flex: "1",
+      backgroundColor: "$white",
+      padding: "30px 60px",
+  
+      "h2": {
+        fontSize: "20px",
+        fontWeight: "700",
+        marginBottom: "60px",
+      },
+  
+    },
+    
+    ".filter": {
+      ".filter-type": {
+        marginBottom: "10px",
+      },
+
+      ".filter-date": {
+        display: "flex",
+        alignItems: "center",
+        ".date-reset": {
+          color: "#999",
+          fontWeight: "800",
+          marginLeft: "20px",
+        },
+      
+        fontWeight: "700",
+        marginRight: "40px",
+      }
+    },
+  }
+})
 
 const EmployeeIndexPage = () => {
   const [startDate, setStartDate] = useState(new Date());
@@ -82,52 +128,7 @@ const EmployeeIndexPage = () => {
     setPaginateOption(option)
   }
 
-  const EmployeeIndexStyled = styled('div', {
-    display: "flex",
-    height: "100vh",
-    "@md": {
-      width: "100%",
-    },
-    ".commute": {
-      display: "flex",
-      overflow: "hidden",
-      width: "100%",
-      "@md": {
-        flexWrap: "wrap",
-      },
-      "&__list": {
-        flex: "1",
-        backgroundColor: "$white",
-        padding: "30px 60px",
-    
-        "h2": {
-          fontSize: "20px",
-          fontWeight: "700",
-          marginBottom: "60px",
-        },
-    
-      },
-      
-      ".filter": {
-        ".filter-type": {
-          marginBottom: "10px",
-        },
-
-        ".filter-date": {
-          display: "flex",
-          alignItems: "center",
-          ".date-reset": {
-            color: "#999",
-            fontWeight: "800",
-            marginLeft: "20px",
-          },
-        
-          fontWeight: "700",
-          marginRight: "40px",
-        }
-      },
-    }
-  })
+  
 
   return (
     <>

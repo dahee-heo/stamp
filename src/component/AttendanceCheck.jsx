@@ -11,6 +11,50 @@ import { Button } from './Button';
 import { styled } from '../config/stitches.config'
 import { useInterval } from '../hook/useInterval'
 
+const AttendanceCheckStyled = styled('div', {
+  padding: "45px 36px",
+  width: "360px",
+  height: "100%",
+  borderRight: "1px solid $gray300",
+  "@md": {
+    width: "100vw",
+    borderRight: "none",
+    borderBottom: "1px solid $gray300",
+  },
+
+  ".commute__check": {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    marginRight: "20px",
+    backgroundColor: "$white",
+
+    ".check-top": {
+      width: "100%",
+      display: "flex",
+      justifyContent: "space-between",
+      marginBottom: "10px",
+
+      ":nth-child(1)": {
+        fontSize: "16px",
+        flex: "4",
+      },
+
+      ":nth-child(2), :nth-child(3)": {
+        fontSize: "12px",
+        textDecorationLine: "underline",
+        marginLeft: "10px",
+        cursor: "pointer",
+      },
+    },
+
+    ".commte-time": {
+      fontSize: "30px",
+      fontWeight: "600",
+      marginBottom: "18px",
+    }
+  }
+})
 
 export const AttendanceCheck = ({ page, loadDate }) => {
   const { isOpen: updateOpen, onOpen: updateOnOpen, onClose: updateOnClose } = useDisclosure()
@@ -31,57 +75,6 @@ export const AttendanceCheck = ({ page, loadDate }) => {
     setAuth({ ...auth, state: res.data })
     loadDate({ page })
   }
-
-  async function logout() {
-    await authLogout()
-    setAuth(initialAuthState)
-    nav('/')
-  }
-
-  const AttendanceCheckStyled = styled('div', {
-    padding: "45px 36px",
-    width: "360px",
-    height: "100%",
-    borderRight: "1px solid $gray300",
-    "@md": {
-      width: "100vw",
-      borderRight: "none",
-      borderBottom: "1px solid $gray300",
-    },
-
-    ".commute__check": {
-      width: "100%",
-      display: "flex",
-      flexDirection: "column",
-      marginRight: "20px",
-      backgroundColor: "$white",
-  
-      ".check-top": {
-        width: "100%",
-        display: "flex",
-        justifyContent: "space-between",
-        marginBottom: "10px",
-  
-        ":nth-child(1)": {
-          fontSize: "16px",
-          flex: "4",
-        },
-  
-        ":nth-child(2), :nth-child(3)": {
-          fontSize: "12px",
-          textDecorationLine: "underline",
-          marginLeft: "10px",
-          cursor: "pointer",
-        },
-      },
-  
-      ".commte-time": {
-        fontSize: "30px",
-        fontWeight: "600",
-        marginBottom: "18px",
-      }
-    }
-  })
 
   return (
     <>
