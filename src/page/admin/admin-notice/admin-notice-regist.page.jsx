@@ -8,6 +8,7 @@ import { noticeRegist } from '../../../service/notice.service';
 import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
 import axios from 'axios';
+import { getHostUrl } from '../../../util/http.util';
 
 const AdminNoticeRegistPage = () => {
   const [inputData, setInputData] = useState({
@@ -35,8 +36,7 @@ const AdminNoticeRegistPage = () => {
     }
   }
 
-  const API_URL = "http://localhost:3000";
-  const UPLOAD_ENDPOINT = "upload_files";
+  const hostUrl = getHostUrl()
 
   function uploadAdapter(loader) {
     return {
@@ -45,13 +45,11 @@ const AdminNoticeRegistPage = () => {
           const data = new FormData();
           loader.file.then((file) => {
             data.append("files", file);
-            // let headers = new Headers();
-            // headers.append("Origin", "http://localhost:3000");
             axios
-              .post(`http://localhost:3000/notice/file`, data)
+              .post(`${hostUrl}/notice/file`, data)
               .then((res) => {
                 resolve({
-                  default: `http://localhost:3000/${res.data.filename}`,
+                  default: `${hostUrl}/${res.data.filename}`,
                 });
               })
               .catch((err) => {
