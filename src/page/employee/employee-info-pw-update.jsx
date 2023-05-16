@@ -24,9 +24,6 @@ const EmployeeInfoPwUpdate = (props) => {
     passwordCheck: null,
   })
 
-  useEffect(() => {
-    console.log('props.updateMyInfo: ', props.updateMyInfo);
-  }, [])
 
   async function pwUpdate() {
     const obj = {
@@ -42,7 +39,7 @@ const EmployeeInfoPwUpdate = (props) => {
         onClose()
 
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         alert('비밀번호를 정확하게 입력해주세요')
       }
     } else {
