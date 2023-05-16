@@ -78,9 +78,11 @@ const AdminNoticePage = () => {
               noticeData?.map((notice) => {
                 return (
                   <Tr key={notice._id}>
-                    <Td><Link to={`/admin/notice/${notice._id}`}> {notice.title}</Link></Td>
-                    <Td>{format(new Date(notice.date), 'yyyy-MM-dd')}</Td>
-                    <Td>{notice.userId?.name}</Td>
+                    <Td><Link to={`/admin/notice/${notice._id}`}> {notice?.title}</Link></Td>
+                    {notice.date ? <Td> {format(new Date(notice?.date), 'yyyy-MM-dd')} </Td> : 
+                      <Td>null</Td>
+                    }
+                    <Td>{notice?.userId?.name}</Td>
                     <Td isNumeric>
                       <ButtonsWrap>
                         <Link to={`/admin/notice/edit/${notice._id}`}>
