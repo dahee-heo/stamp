@@ -78,7 +78,7 @@ const AdminAttendancePage = () => {
   const total = adminAttendanceData.reduce((acc, current) => {
     return acc + current.totalSeconds
   }, 0)
-  console.log('total: ', total, total/(60*60));
+  // console.log('total: ', total, total/(60*60));
   
   return (
     <div className='admin-section-wrap'>

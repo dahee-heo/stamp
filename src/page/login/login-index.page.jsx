@@ -89,7 +89,7 @@ const LoginIndexPage = () => {
       const res = await authLogin(data)
       setAuth(() => res.data)
     } catch (error) {
-      console.log(error)
+      console.log(error.message)
     }
   }
 
