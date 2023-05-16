@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { noticeRegist } from '../../../service/notice.service';
 import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
+import axios from 'axios';
 
 const AdminNoticeRegistPage = () => {
   const [inputData, setInputData] = useState({
@@ -34,6 +35,40 @@ const AdminNoticeRegistPage = () => {
     }
   }
 
+  const API_URL = "http://localhost:3000";
+  const UPLOAD_ENDPOINT = "upload_files";
+
+  function uploadAdapter(loader) {
+    return {
+      upload() {
+        return new Promise((resolve, reject) => {
+          const data = new FormData();
+          loader.file.then((file) => {
+            data.append("files", file);
+            // let headers = new Headers();
+            // headers.append("Origin", "http://localhost:3000");
+            axios
+              .post(`http://localhost:3000/notice/file`, data)
+              .then((res) => {
+                resolve({
+                  default: `http://localhost:3000/${res.data.filename}`,
+                });
+              })
+              .catch((err) => {
+                reject(err);
+              });
+          });
+        });
+      }
+    };
+  }
+
+  function uploadPlugin(editor) {
+    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+      return uploadAdapter(loader);
+    };
+  }
+
   return (
     <RegistEditPageStyled>
       <FormControl>
@@ -44,10 +79,10 @@ const AdminNoticeRegistPage = () => {
           onChange={handleTitleChange}
         />
         <CKEditor
-          
           editor={ ClassicEditor }
           config={{
             placeholder: "내용을 입력하세요.",
+            extraPlugins: [uploadPlugin]
           }}
           data=""
           onChange={ ( event, editor ) => {
@@ -56,7 +91,8 @@ const AdminNoticeRegistPage = () => {
                 ...inputData,
                 content: data,
               })
-          } }
+          }}
+          
       />
         <ButtonsWrap>
           <Button 
