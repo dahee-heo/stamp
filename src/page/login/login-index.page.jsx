@@ -129,6 +129,7 @@ const LoginIndexPage = () => {
             <Input
               id='password'
               type='password'
+              autoComplete='on'
               placeholder='비밀번호를 입력하세요'
               errorBorderColor='red.300'
               // onChange={handleChange}

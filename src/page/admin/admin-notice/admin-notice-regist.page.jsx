@@ -9,8 +9,11 @@ import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
 import axios from 'axios';
 import { getHostUrl } from '../../../util/http.util';
+import { authState } from '../../../atom/auth.atom';
+import { useRecoilState } from 'recoil';
 
 const AdminNoticeRegistPage = () => {
+  const [auth, setAuth] = useRecoilState(authState)
   const [inputData, setInputData] = useState({
     title: '',
     content: '',
@@ -80,7 +83,12 @@ const AdminNoticeRegistPage = () => {
           editor={ ClassicEditor }
           config={{
             placeholder: "내용을 입력하세요.",
-            extraPlugins: [uploadPlugin]
+            extraPlugins: [uploadPlugin],
+            simpleUpload: {
+              // uploadUrl: `${hostUrl}/notice/file`,
+              withCredentials: false,
+              'Authorization': 'Bearer ' + auth?.token
+            }
           }}
           data=""
           onChange={ ( event, editor ) => {
