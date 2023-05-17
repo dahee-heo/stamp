@@ -85,7 +85,7 @@ const AdminNoticeRegistPage = () => {
             placeholder: "내용을 입력하세요.",
             extraPlugins: [uploadPlugin],
             simpleUpload: {
-              // uploadUrl: `${hostUrl}/notice/file`,
+              uploadUrl: `${hostUrl}/notice/file`,
               withCredentials: false,
               'Authorization': 'Bearer ' + auth?.token
             }
