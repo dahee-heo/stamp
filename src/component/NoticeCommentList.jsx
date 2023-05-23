@@ -5,7 +5,7 @@ import { Input } from '@chakra-ui/react';
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
 import { styled } from '../config/stitches.config';
-import { commentUpdate } from '../service/notice.service';
+import { commentUpdate, commentDelete } from '../service/notice.service';
 
 export const NoticeCommentList = ({ comment, params, getComment }) => {
   const [isEdit, setIsEdit] = useState(false);
@@ -31,6 +31,11 @@ export const NoticeCommentList = ({ comment, params, getComment }) => {
     commentUpdate(data)
     getComment()
     setIsEdit(false)
+  }
+
+  const onDelete = (id) => {
+    commentDelete(id);
+    getComment()
   }
 
 
@@ -65,11 +70,18 @@ export const NoticeCommentList = ({ comment, params, getComment }) => {
           </div>
           <div className='comment-list-content'>
             <p>{comment.content}</p>
-            <Button 
-              color="outline" 
-              size="sm"
-              onClick={()=>setIsEdit(true)}
-            >수정</Button>
+            <ButtonsWrap>
+              <Button 
+                color="outline" 
+                size="sm"
+                onClick={()=>setIsEdit(true)}
+              >수정</Button>
+              <Button 
+                color="outline" 
+                size="sm"
+                onClick={()=>onDelete(comment._id)}
+              >삭제</Button>
+            </ButtonsWrap>
           </div>
         </div>
       )}
