@@ -12,14 +12,12 @@ import { useRecoilState } from 'recoil';
 import { authState } from '../../../atom/auth.atom';
 import { DetailPageStyled } from '../../../style/DetailPageStyled';
 import { NoticeCommentList } from '../../../component/NoticeCommentList';
+import draftjsToHtml from 'draftjs-to-html';
+
 
 const AdminNoticeDetailPage = () => {
   const params = useParams();
-  const [contents, setContents] = useState({
-    title: '',
-    content: '',
-    date: '',
-  })
+  const [contents, setContents] = useState({})
   const [comment, setComment] = useState({
     content: '',
     date: new Date(),
@@ -29,7 +27,11 @@ const AdminNoticeDetailPage = () => {
   
   const getNotice = async () => {
     const { data } = await noticeGet(params.id)
-    setContents(data)
+    const json =  JSON.parse(data.content);
+    setContents({
+      ...data,
+      content: draftjsToHtml(json),
+    })
   }
 
   const onChange = e => {
@@ -68,7 +70,9 @@ const AdminNoticeDetailPage = () => {
         {/* <p className='write-date'>{format(new Date(contents.date), 'yyyy-MM-dd hh:mm:ss')}</p> */}
         {/* <p>{contents.userId.name}</p> */}
       </div>
-      <div className='content'>{ReactHtmlParser(contents.content)}</div>
+      {/* <div className='content'>{ReactHtmlParser(contents.content)}</div> */}
+      <div className='content' dangerouslySetInnerHTML={{ __html: contents.content}}/>
+      {/* <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(contents.content)}}/> */}
       <div className='comment'>
         <p>댓글 <span className='comment-length'>{list?.length}</span>개</p>
         <FormControl>

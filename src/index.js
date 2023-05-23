@@ -8,12 +8,13 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { RecoilRoot } from 'recoil';
 import axios from 'axios';
 import "react-datepicker/dist/react-datepicker.css"
+import { render } from "react-dom";                 
 
 //axios default setting 
 axios.defaults.withCredentials = true
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+// const root = ReactDOM.createRoot(document.getElementById('root'));
+render(
   <React.StrictMode>
     <ChakraProvider>
       <RecoilRoot>
@@ -23,7 +24,8 @@ root.render(
         </BrowserRouter>
       </RecoilRoot>
     </ChakraProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function

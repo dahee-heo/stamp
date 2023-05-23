@@ -11,27 +11,34 @@ import axios from 'axios';
 import { getHostUrl } from '../../../util/http.util';
 import { authState } from '../../../atom/auth.atom';
 import { useRecoilState } from 'recoil';
+import { DraftWysiwygEditor } from '../../../component/DraftWysiwygEditor';
+import { EditorState, convertToRaw } from 'draft-js';
 
 const AdminNoticeRegistPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
-  const [inputData, setInputData] = useState({
-    title: '',
-    content: '',
-    date: new Date(),
-  })
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [title, setTitle] = useState('')
+  // const [inputData, setInputData] = useState({
+  //   title: '',
+  //   content: '',
+  //   date: new Date(),
+  // })
   const navigate = useNavigate();
 
-
   const handleTitleChange = e => {
-    setInputData({
-      ...inputData,
-      title: e.target.value
-    })
+    setTitle(e.target.value)
   }
 
   const handleSubmit = async () => {
-    if(inputData.title.length && inputData.content.length) {
-      const res = await noticeRegist(inputData)
+    const convertEditorState = convertToRaw(editorState.getCurrentContent())
+    if(title.length && convertEditorState) {
+      const data = {
+        title,
+        content: JSON.stringify(convertEditorState),
+        date: new Date(),
+      }
+      const res = await noticeRegist(data)
+      console.log('res: ', res);
       navigate('/admin/notice')
     } else {
       alert('내용을 작성해주세요.')
@@ -79,27 +86,12 @@ const AdminNoticeRegistPage = () => {
           placeholder='제목을 입력하세요.'
           onChange={handleTitleChange}
         />
-        <CKEditor
-          editor={ ClassicEditor }
-          config={{
-            placeholder: "내용을 입력하세요.",
-            extraPlugins: [uploadPlugin],
-            simpleUpload: {
-              uploadUrl: `${hostUrl}/notice/file`,
-              withCredentials: false,
-              'Authorization': 'Bearer ' + auth?.token
-            }
-          }}
-          data=""
-          onChange={ ( event, editor ) => {
-              const data = editor.getData();
-              setInputData({
-                ...inputData,
-                content: data,
-              })
-          }}
-          
-      />
+        <DraftWysiwygEditor 
+          // inputData={inputData} 
+          // setInputData={setInputData}
+          editorState={editorState}
+          setEditorState={setEditorState}
+        />
         <ButtonsWrap>
           <Button 
             color="outline"
