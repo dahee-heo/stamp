@@ -39,3 +39,7 @@ export const commentGet = async (params) => {
 export const commentUpdate = async (params) => {
   return await axios.patch(`${hostUrl}/notice/${params.noticeId}/comment`, params)
 }
+
+export const commentDelete = async (params) => {
+  return await axios.delete(`${hostUrl}/notice/${params}/comment`)
+}

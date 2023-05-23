@@ -1,13 +1,20 @@
 import { styled } from '../config/stitches.config';
 
 export const RegistEditPageStyled = styled("div", {
-  width: "99%",
-  maxWidth: "800px",
-  ".ck.ck-editor": {
-    margin: "10px 0"
+  width: "100%",
+  maxWidth: "100%",
+  ".toolbar-class": {
+    border: "1px solid $gray200 !important",
+
   },
-  ".ck.ck-editor__editable:not(.ck-editor__nested-editable)": {
-    minHeight: "500px",
-    width: "100%",
+  ".wrapper-class": {
+    margin: "10px auto",
+  },
+  ".editor": {
+  height: "500px !important",
+  border: "1px solid $gray200 !important",
+  padding: "5px !important",
+  borderRadius: "2px !important",
   }
+
 })

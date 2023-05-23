@@ -7,19 +7,26 @@ import { noticeGet, noticeUpdate } from '../../../service/notice.service';
 import { Button } from '../../../component/Button';
 import { ButtonsWrap } from '../../../component/ButtonsWrap';
 import { RegistEditPageStyled } from '../../../style/RegistEditPageStyled';
+import { DraftWysiwygEditor } from '../../../component/DraftWysiwygEditor';
+import { 
+  EditorState, 
+  convertToRaw,
+  convertFromRaw,
+  ContentState,
+} from 'draft-js';
+import draftjsToHtml from 'draftjs-to-html';
 
 const AdminNoticeEditPage = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [contents, setContents] = useState({
-    title: '',
-    content: '',
-    _id: params.id,
-  })
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+  const [contents, setContents] = useState({})
+  const [title, setTitle] = useState('')
 
   useEffect(() => {
     getNotice()
   }, [])
+  
 
   const handleTitleChange = e => {
     setContents({
@@ -30,16 +37,29 @@ const AdminNoticeEditPage = () => {
 
   const getNotice = async () => {
     const { data } = await noticeGet(params.id);
-    setContents({
-      ...contents,
-      title: data.title,
-      content: data.content,
-    })
+    const json =  JSON.parse(data.content);
+    const contentRaw = convertFromRaw(json)
+    // console.log('contentRaw: ', contentRaw);
+    // setEditorState(contentRaw)
+    setTitle(data.title)
+    setEditorState(EditorState.createWithContent(contentRaw))
   }
 
   const handleSubmit = async () => {
-    await noticeUpdate(contents)
-    navigate('/admin/notice')
+    const convertEditorState = convertToRaw(editorState.getCurrentContent())
+    if(title.length && convertEditorState) {
+      const data = {
+        title,
+        _id: params.id,
+        content: JSON.stringify(convertEditorState),
+      }
+      console.log('data: ', data);
+      await noticeUpdate(data)
+      navigate('/admin/notice')
+    } else {
+      alert('내용을 작성해주세요.')
+      return;
+    }
   }
 
   return (
@@ -48,20 +68,13 @@ const AdminNoticeEditPage = () => {
         <Input 
           name='title'
           placeholder='제목을 입력하세요.'
-          defaultValue={contents.title}
+          defaultValue={title}
           onChange={handleTitleChange}
         />
-        <CKEditor
-          editor={ ClassicEditor }
-          data={contents.content}
-          onChange={ ( event, editor ) => {
-              const data = editor.getData();
-              setContents({
-                ...contents,
-                content: data,
-              })
-          } }
-      />     
+        <DraftWysiwygEditor
+          editorState={editorState}
+          setEditorState={setEditorState}
+        />
       <ButtonsWrap>
           <Button 
             color="outline"
