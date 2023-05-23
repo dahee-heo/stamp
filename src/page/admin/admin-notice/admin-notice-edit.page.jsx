@@ -1,7 +1,5 @@
 import { FormControl, Input, Textarea } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { useNavigate, useParams } from 'react-router-dom';
 import { noticeGet, noticeUpdate } from '../../../service/notice.service';
 import { Button } from '../../../component/Button';
@@ -14,7 +12,6 @@ import {
   convertFromRaw,
   ContentState,
 } from 'draft-js';
-import draftjsToHtml from 'draftjs-to-html';
 
 const AdminNoticeEditPage = () => {
   const navigate = useNavigate();
@@ -53,7 +50,6 @@ const AdminNoticeEditPage = () => {
         _id: params.id,
         content: JSON.stringify(convertEditorState),
       }
-      console.log('data: ', data);
       await noticeUpdate(data)
       navigate('/admin/notice')
     } else {

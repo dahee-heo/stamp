@@ -1,7 +1,5 @@
 import { FormControl, Input, Textarea } from '@chakra-ui/react'
 import React, { useState, useEffect } from 'react'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button } from '../../../component/Button'
 import { useNavigate } from 'react-router-dom';
 import { noticeRegist } from '../../../service/notice.service';
@@ -18,11 +16,6 @@ const AdminNoticeRegistPage = () => {
   const [auth, setAuth] = useRecoilState(authState)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
   const [title, setTitle] = useState('')
-  // const [inputData, setInputData] = useState({
-  //   title: '',
-  //   content: '',
-  //   date: new Date(),
-  // })
   const navigate = useNavigate();
 
   const handleTitleChange = e => {
@@ -38,7 +31,6 @@ const AdminNoticeRegistPage = () => {
         date: new Date(),
       }
       const res = await noticeRegist(data)
-      console.log('res: ', res);
       navigate('/admin/notice')
     } else {
       alert('내용을 작성해주세요.')
