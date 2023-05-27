@@ -2,7 +2,8 @@ import { Outlet } from 'react-router-dom';
 import { styled } from '../config/stitches.config';
 
 export const SectionStyled = styled("section", {
-  padding: "45px 200px 0 80px",
+  overflowY: "scroll",
+  padding: "45px 80px 0",
   fontFamily: "$system",
   flex: "1",
   ".admin-section-wrap, .employee-section-wrap": {

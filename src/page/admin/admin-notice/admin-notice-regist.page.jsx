@@ -40,34 +40,34 @@ const AdminNoticeRegistPage = () => {
 
   const hostUrl = getHostUrl()
 
-  function uploadAdapter(loader) {
-    return {
-      upload() {
-        return new Promise((resolve, reject) => {
-          const data = new FormData();
-          loader.file.then((file) => {
-            data.append("files", file);
-            axios
-              .post(`${hostUrl}/notice/file`, data)
-              .then((res) => {
-                resolve({
-                  default: `${hostUrl}/${res.data.filename}`,
-                });
-              })
-              .catch((err) => {
-                reject(err);
-              });
-          });
-        });
-      }
-    };
-  }
+  // function uploadAdapter(loader) {
+  //   return {
+  //     upload() {
+  //       return new Promise((resolve, reject) => {
+  //         const data = new FormData();
+  //         loader.file.then((file) => {
+  //           data.append("files", file);
+  //           axios
+  //             .post(`${hostUrl}/notice/file`, data)
+  //             .then((res) => {
+  //               resolve({
+  //                 default: `${hostUrl}/${res.data.filename}`,
+  //               });
+  //             })
+  //             .catch((err) => {
+  //               reject(err);
+  //             });
+  //         });
+  //       });
+  //     }
+  //   };
+  // }
 
-  function uploadPlugin(editor) {
-    editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return uploadAdapter(loader);
-    };
-  }
+  // function uploadPlugin(editor) {
+  //   editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
+  //     return uploadAdapter(loader);
+  //   };
+  // }
 
   return (
     <RegistEditPageStyled>
